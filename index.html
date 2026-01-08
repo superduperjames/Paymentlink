@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Interactive Image Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      text-align: center;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    .main-image {
+      max-width: 90%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+    }
+
+    .downloads a {
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      color: #0066cc;
+    }
+
+    .name-box {
+      margin-top: 30px;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 220px;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #222;
+      color: white;
+      margin: 6px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover:enabled {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .button-group {
+      display: none;
+      margin-top: 25px;
+    }
+
+    /* Modal overlay */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    /* Modal box */
+    .modal-content {
+      background: white;
+      padding: 15px;
+      border-radius: 14px;
+      max-width: 90%;
+      max-height: 90%;
+      transform: scale(0.9);
+      opacity: 0;
+      animation: popIn 0.35s ease forwards;
+    }
+
+    .modal-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .close {
+      display: inline-block;
+      margin-top: 12px;
+      color: #444;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Main Image -->
+  <img src="images/main-image.jpg" alt="Main Image" class="main-image">
+
+  <!-- Download links -->
+  <div class="downloads">
+    <a href="files/sample.pdf" download>Download PDF</a>
+    <a href="files/sample.xlsx" download>Download XLS</a>
+  </div>
+
+  <!-- Name Input -->
+  <div class="name-box">
+    <p>Please enter your name:</p>
+    <input type="text" id="username" placeholder="Your name" />
+    <button onclick="unlockButtons()">Continue</button>
+  </div>
+
+  <!-- Buttons (locked by default) -->
+  <div class="button-group" id="buttonGroup">
+    <p id="welcomeText"></p>
+    <button disabled onclick="openModal('images/popup1.jpg')">Button 1</button>
+    <button disabled onclick="openModal('images/popup2.jpg')">Button 2</button>
+    <button disabled onclick="openModal('images/popup3.jpg')">Button 3</button>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <img id="modalImage" src="" alt="Popup Image">
+    <div class="close" onclick="closeModal()">Close</div>
+  </div>
+</div>
+
+<script>
+  function unlockButtons() {
+    const name = document.getElementById("username").value.trim();
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    document.getElementById("welcomeText").textContent =
+      "Welcome, " + name + "!";
+
+    const group = document.getElementById("buttonGroup");
+    group.style.display = "block";
+
+    const buttons = group.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = false);
+  }
+
+  function openModal(imageSrc) {
+    const modal = document.getElementById("modal");
+    document.getElementById("modalImage").src = imageSrc;
+    modal.style.display = "flex";
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+    document.getElementById("modalImage").src = "";
+  }
+</script>
+
+</body>
+</html>
