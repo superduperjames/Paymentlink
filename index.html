@@ -106,7 +106,12 @@
     .action-buttons button:nth-child(2) { animation-delay: 0.15s; }
     .action-buttons button:nth-child(3) { animation-delay: 0.25s; }
 
-    .action-buttons button:hover {
+    .action-buttons button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .action-buttons button:hover:not(:disabled) {
       transform: translateY(-4px) scale(1.03);
       background: #2d3748;
     }
@@ -176,8 +181,8 @@
   <img src="https://res.cloudinary.com/eventmobi/image/upload/v1767906458/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Screenshot_2026-01-09_at_5.07.21_AM.png" class="hero-image">
 
   <div class="downloads">
-    <a href="files/sample.pdf" download>PDF</a>
-    <a href="files/sample.xlsx" download>XLS</a>
+    <a href="https://res.cloudinary.com/eventmobi/image/upload/v1767906347/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Daily_Tracking_-_Sheet7.pdf" download>Download as PDF</a>
+    <a href="https://res.cloudinary.com/eventmobi/raw/upload/v1767906541/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Expenses.xlsx" download>Download as XLS File</a>
   </div>
 
   <div class="name-box">
@@ -190,9 +195,9 @@
     <div class="welcome" id="welcomeText"></div>
 
     <div class="action-buttons">
-      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option1')">Option One</button>
-      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option2')">Option Two</button>
-      <button onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option3')">Option Three</button>
+      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option1')">Option One</button>
+      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option2')">Option Two</button>
+      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767907612/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Artboard_5.png', 'option3')">Option Three</button>
     </div>
   </div>
 
@@ -208,60 +213,57 @@
 </div>
 
 <script>
-  /* ========= EDIT THESE TWO SECTIONS ========= */
+  /* ========= HARD-CODED, FOOL-PROOF DATA ========= */
 
-  // Personalized amounts (max 9 names)
   const nameData = {
-    "James": {
-      option1: "₱12,500",
-      option2: "₱8,000",
-      option3: "₱3,200"
-    },
-    "Nikki": {
-      option1: "₱15,000",
-      option2: "₱9,500",
-      option3: "₱4,000"
-    },
-    "AJ": {
-      option1: "₱10,000",
-      option2: "₱6,500",
-      option3: "₱2,800"
-    }
+    james:  { option1: 100, option2: 200, option3: 300 },
+    allen:  { option1: 100, option2: 200, option3: 300 },
+    nikki:  { option1: 100, option2: 200, option3: 300 },
+    aj:     { option1: 100, option2: 200, option3: 300 },
+    anjo:   { option1: 100, option2: 200, option3: 300 },
+    sean:   { option1: 100, option2: 200, option3: 300 },
+    kath:   { option1: 100, option2: 200, option3: 300 },
+    celine: { option1: 100, option2: 200, option3: 300 }
   };
-
-  // Default amounts for unknown names
-  const defaultAmounts = {
-    option1: "ERROR",
-    option2: "ERROR",
-    option3: "ERROR"
-  };
-
-  /* ========================================= */
 
   let currentUser = "";
-  let isKnownUser = false;
+
+  function sanitize(input) {
+    return input.toLowerCase().replace(/\s+/g, "").trim();
+  }
 
   function unlock() {
-    const input = document.getElementById("username").value.trim().toLowerCase();
-    if (!input) return alert("Please enter your name.");
+    const raw = document.getElementById("username").value;
+    const input = sanitize(raw);
+
+    if (!input) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!nameData[input]) {
+      alert("Name not recognized.");
+      return;
+    }
 
     currentUser = input;
-    isKnownUser = !!nameData[input];
 
     document.getElementById("welcomeText").textContent =
-      "Welcome, " + input.charAt(0).toUpperCase() + input.slice(1);
+      "Welcome, " + raw.trim();
 
-    document.getElementById("buttonGroup").style.display = "block";
+    const group = document.getElementById("buttonGroup");
+    group.style.display = "block";
+
+    group.querySelectorAll("button").forEach(btn => {
+      btn.disabled = false;
+    });
   }
 
   function openModal(imageSrc, optionKey) {
     document.getElementById("modalImage").src = imageSrc;
+    document.getElementById("amountText").textContent =
+      nameData[currentUser][optionKey];
 
-    const amount = isKnownUser
-      ? nameData[currentUser][optionKey]
-      : defaultAmounts[optionKey];
-
-    document.getElementById("amountText").textContent = amount;
     document.getElementById("modal").style.display = "flex";
   }
 
