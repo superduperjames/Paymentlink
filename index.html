@@ -14,8 +14,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: url('https://res.cloudinary.com/eventmobi/image/upload/v1767909276/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/BG.png') no-repeat center center fixed;
       background-size: cover;
-      margin: 0;
-      padding: 0;
       color: #fff;
       display: flex;
       align-items: center;
@@ -36,6 +34,12 @@
       width: 100%;
       border-radius: 14px;
       margin-bottom: 20px;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+
+    .hero-image:hover {
+      transform: scale(1.015);
     }
 
     .downloads {
@@ -83,6 +87,8 @@
     .welcome {
       font-size: 18px;
       margin-bottom: 18px;
+      font-weight: 600;
+      color: #1a202c;
     }
 
     .action-buttons {
@@ -120,7 +126,7 @@
       background: #2d3748;
     }
 
-    /* Modal */
+    /* Existing Modal */
     .modal {
       display: none;
       position: fixed;
@@ -163,6 +169,33 @@
       color: #555;
     }
 
+    /* Fullscreen Image Viewer */
+    .fullscreen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fullscreen img {
+      max-width: 95%;
+      max-height: 95%;
+      border-radius: 12px;
+    }
+
+    .fullscreen-close {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
     @keyframes buttonIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -182,7 +215,11 @@
 
 <div class="card">
 
-  <img src="https://res.cloudinary.com/eventmobi/image/upload/v1767906458/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Screenshot_2026-01-09_at_5.07.21_AM.png" class="hero-image">
+  <img
+    src="https://res.cloudinary.com/eventmobi/image/upload/v1767906458/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Screenshot_2026-01-09_at_5.07.21_AM.png"
+    class="hero-image"
+    onclick="openFullscreen(this.src)"
+  >
 
   <div class="downloads">
     <a href="https://res.cloudinary.com/eventmobi/image/upload/v1767906347/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Daily_Tracking_-_Sheet7.pdf" download>Download as PDF</a>
@@ -207,7 +244,7 @@
 
 </div>
 
-<!-- Modal -->
+<!-- Existing Modal -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <img id="modalImage">
@@ -216,9 +253,13 @@
   </div>
 </div>
 
-<script>
-  /* ========= HARD-CODED, FOOL-PROOF DATA ========= */
+<!-- Fullscreen Image -->
+<div class="fullscreen" id="fullscreen" onclick="closeFullscreen()">
+  <div class="fullscreen-close" onclick="closeFullscreen()">×</div>
+  <img id="fullscreenImg">
+</div>
 
+<script>
   const nameData = {
     james:  { option1: 1000, option2: 2000, option3: 3000 },
     allen:  { option1: 1100, option2: 1200, option3: 1300 },
@@ -253,7 +294,7 @@
     currentUser = input;
 
     document.getElementById("welcomeText").textContent =
-      "Welcome, " + raw.trim();
+      "Welcome " + raw.trim() + "!";
 
     const group = document.getElementById("buttonGroup");
     group.style.display = "block";
@@ -275,6 +316,16 @@
     document.getElementById("modal").style.display = "none";
     document.getElementById("modalImage").src = "";
     document.getElementById("amountText").textContent = "";
+  }
+
+  function openFullscreen(src) {
+    document.getElementById("fullscreenImg").src = src;
+    document.getElementById("fullscreen").style.display = "flex";
+  }
+
+  function closeFullscreen() {
+    document.getElementById("fullscreen").style.display = "none";
+    document.getElementById("fullscreenImg").src = "";
   }
 </script>
 
