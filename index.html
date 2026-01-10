@@ -116,6 +116,7 @@
     .action-buttons button:nth-child(2) { animation-delay: 0.15s; }
     .action-buttons button:nth-child(3) { animation-delay: 0.25s; }
     .action-buttons button:nth-child(4) { animation-delay: 0.25s; }
+    .action-buttons button:nth-child(5) { animation-delay: 0.25s; }
 
     .action-buttons button:disabled {
       opacity: 0.35;
@@ -241,6 +242,7 @@
       <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Nikkimaya.png', 'option2')">Pay Nikki Here!</button>
       <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767910365/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/AJMaribank.png', 'option3')">Pay AJ Here!</button>
       <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1767926646/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/AnjoBPI.png', 'option4')">Pay Anjo Here!</button>
+      <button disabled onclick="openModal('https://res.cloudinary.com/eventmobi/image/upload/v1768041685/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/CelineGcash.png', 'option4')">Pay Celine Here!</button>
     </div>
   </div>
 
@@ -263,14 +265,14 @@
 
 <script>
   const nameData = {
-    james:  { option1: 0, option2: 0, option3: 0, option4: 0 },
-    allen:  { option1: 532, option2: 719, option3: 324, option4: 100 },
-    nikki:  { option1: 169, option2: 0, option3: 0, option4: 0 },
-    aj:     { option1: 208, option2: 368, option3: 0, option4: 0 },
-    anjo:   { option1: 432, option2: 637, option3: 224, option4: 0 },
-    sean:   { option1: 532, option2: 757, option3: 324, option4: 100 },
-    kath:   { option1: 532, option2: 687, option3: 324, option4: 100 },
-    celine: { option1: 417, option2: 802, option3: 209, option4: 15 }
+    james:  { option1: 0, option2: 0, option3: 0, option4: 0, option5: 0 },
+    allen:  { option1: 532, option2: 719, option3: 324, option4: 100, option5: 115 },
+    nikki:  { option1: 169, option2: 0, option3: 0, option4: 0, option5: 0 },
+    aj:     { option1: 208, option2: 368, option3: 0, option4: 0, option5: 0 },
+    anjo:   { option1: 432, option2: 637, option3: 224, option4: 0, option5: 0 },
+    sean:   { option1: 532, option2: 757, option3: 324, option4: 100, option5: 115 },
+    kath:   { option1: 532, option2: 687, option3: 324, option4: 100, option5: 115 },
+    celine: { option1: 417, option2: 802, option3: 209, option4: 15, option5: 0 }
   };
 
   let currentUser = "";
