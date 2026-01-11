@@ -9,56 +9,44 @@
     * { box-sizing: border-box; }
 
     body {
-      margin: 0;
+      margin-top:10%;
+      margin-bottom:10%;
+      min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: url('https://res.cloudinary.com/eventmobi/image/upload/v1767909276/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/BG.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .card-grid {
+    .card-stack {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: flex-start;
-      padding: 40px 20px;
-      max-width: 1400px;
-      margin: 0 auto;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .card-title {
+      font-size: 25px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-bottom: 30px;
+      text-align: center;
     }
 
     .card {
       background: #ffffff;
-      padding: 20px;
-      border-radius: 14px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      color: #1a202c;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 20px;
+      width: 92%;
+      max-width: 720px;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.12);
       text-align: center;
     }
 
-    /* Bento card sizes */
-    .card-large { flex: 1 1 48%; }
-    .card-medium { flex: 1 1 30%; }
-    .card-small { flex: 1 1 22%; }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .card-large { flex: 1 1 100%; }
-      .card-medium { flex: 1 1 48%; }
-      .card-small { flex: 1 1 48%; }
-    }
-    @media (max-width: 640px) {
-      .card-large, .card-medium, .card-small { flex: 1 1 100%; }
-    }
-
-    /* Payment Gateway styles */
     .hero-image {
       width: 100%;
       border-radius: 14px;
@@ -66,65 +54,266 @@
       cursor: pointer;
       transition: transform 0.25s ease;
     }
-    .hero-image:hover { transform: scale(1.015); }
 
-    .downloads { margin-bottom: 15px; }
-    .downloads a { margin: 0 10px; font-size: 12px; font-weight: 600; color: #5a67d8; text-decoration: underline; }
+    .hero-image:hover {
+      transform: scale(1.015);
+    }
 
-    .name-box p { margin-bottom: 8px; font-size: 15px; color: #444; }
-    input { width: 220px; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 15px; }
-    .continue-btn { margin-left: 8px; padding: 12px 18px; border-radius: 8px; border: none; background: #111; color: #fff; font-size: 15px; cursor: pointer; }
-    .button-group { margin-top: 30px; display: none; }
-    .welcome { font-size: 30px; margin-bottom: 4px; font-weight: 600; text-align: center; color: #1a202c; }
-    .reset-user { margin-top: -4px; margin-bottom: 30px; font-size: 9px; color: #666; text-align: center; }
-    .reset-user span { color: #5a67d8; cursor: pointer; text-decoration: underline; font-weight: 600; }
+    .downloads {
+      margin-bottom: 28px;
+    }
 
-    .action-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
-    .action-buttons button { min-width: 130px; padding: 16px 8px; font-size: 14px; border-radius: 10px; border: none; background: #1a202c; color: white; cursor: pointer; opacity: 0; transform: translateY(20px); animation: buttonIn 0.5s ease forwards; }
+    .downloads a {
+      margin: 0 10px;
+      font-size: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      color: #5a67d8;
+      text-decoration:underline;
+    }
+
+    .name-box p {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #444;
+    }
+
+    input {
+      width: 220px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .continue-btn {
+      margin-left: 8px;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      background: #111;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .welcome {
+      font-size: 18px;
+      margin-bottom: 18px;
+      font-weight: 600;
+      color: #1a202c;
+    }
+
+    .reset-user {
+      margin-top: -8px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+
+    .reset-user span {
+      color: #5a67d8;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons button {
+      min-width: 120px;
+      padding: 20px 8px;
+      font-size: 12px;
+      border-radius: 10px;
+      border: none;
+      background: #1a202c;
+      color: white;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: buttonIn 0.5s ease forwards;
+    }
+
     .action-buttons button:nth-child(1) { animation-delay: 0.05s; }
     .action-buttons button:nth-child(2) { animation-delay: 0.15s; }
     .action-buttons button:nth-child(3) { animation-delay: 0.25s; }
     .action-buttons button:nth-child(4) { animation-delay: 0.25s; }
     .action-buttons button:nth-child(5) { animation-delay: 0.25s; }
-    .action-buttons button:disabled { opacity: 0.35; cursor: not-allowed; }
-    .action-buttons button:hover:not(:disabled) { transform: translateY(-4px) scale(1.03); background: #2d3748; }
 
-    @keyframes buttonIn { to { opacity: 1; transform: translateY(0); } }
+    .action-buttons button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
 
-    /* Health + Wellness */
-    .package-row { display: block; gap: 16px; align-items: center; justify-content: flex-start; }
-    .package-image { width: 160px; height: 120px; border-radius: 14px; overflow: hidden; flex-shrink: 0; }
-    .package-image img { width: 100%; height: 100%; object-fit: cover; }
-    .package-content { flex: 1; display: flex; flex-direction: column; justify-content: center; font-size: 14px; line-height: 1.4; }
-    .current-month-holder { font-size: 16px; margin-bottom: 4px; color: #333; text-align: left; }
-    .current-month-holder .highlight-month { color: #5a67d8; font-weight: 700; }
-    .month-holder-name { font-size: 28px; font-weight: 700; color: #1a202c; margin-top: 8px; }
+    .action-buttons button:hover:not(:disabled) {
+      transform: translateY(-4px) scale(1.03);
+      background: #2d3748;
+    }
 
-    /* Modal */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease forwards; }
-    .modal-content { background: white; padding: 20px; border-radius: 16px; max-width: 70%; text-align: center; transform: scale(0.92); opacity: 0; animation: popIn 0.35s ease forwards; }
-    .modal-content img { max-width: 80%; border-radius: 10px; }
-    .amount { margin-top: 16px; font-size: 20px; font-weight: 700; color: #1a202c; }
-    .close { margin-top: 14px; font-size: 12px; font-weight: 600; cursor: pointer; color: red; text-decoration: underline; }
+    /* Second card / package styles - Updated layout */
+    .package-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
 
-    /* Fullscreen */
-    .fullscreen { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; }
-    .fullscreen img { max-width: 95%; max-height: 95%; border-radius: 12px; }
-    .fullscreen-close { position: absolute; top: 20px; left: 20px; font-size: 28px; color: #fff; cursor: pointer; font-weight: 600; }
+    .package-image {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 14px;
+      overflow: hidden;
+    }
 
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes popIn { to { transform: scale(1); opacity: 1; } }
+    .package-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
 
-    /* FAQ button */
-    .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #5a67d8; color: #fff; cursor: pointer; margin-top: 10px; }
+    .package-content {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .current-month-holder {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .current-month-holder .highlight-month {
+      color: #5a67d8;
+      font-weight: bolder;
+    }
+
+    .month-holder-name {
+      font-size: 35px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-top: 12px;
+    }
+
+    .faq-btn {
+      margin-top: 16px;
+      padding: 10px 18px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #5a67d8;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    @media (max-width: 640px) {
+      .package-image img {
+        width: 100%;
+        height: auto;
+      }
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      max-width: 70%;
+      text-align: center;
+      transform: scale(0.92);
+      opacity: 0;
+      animation: popIn 0.35s ease forwards;
+    }
+
+    .modal-content img {
+      max-width: 80%;
+      border-radius: 10px;
+    }
+
+    .amount {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a202c;
+    }
+
+    .close {
+      margin-top: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: red;
+      text-decoration:underline;
+    }
+
+    .fullscreen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fullscreen img {
+      max-width: 95%;
+      max-height: 95%;
+      border-radius: 12px;
+    }
+
+    .fullscreen-close {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 28px;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    @keyframes buttonIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      to { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 
 <body>
+<div class="card-stack">
 
-<div class="card-grid">
   <!-- First Card: Payment Gateway -->
-  <div class="card card-large">
+  <div class="card">
     <div class="card-title">Interactive Payment Gateway</div>
     <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768044863/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/QR%20Codes/Screenshot_2026-01-10_at_7.33.42_PM.png" class="hero-image" onclick="openFullscreen(this.src)">
     <div class="downloads">
@@ -149,8 +338,8 @@
     </div>
   </div>
 
-  <!-- Second Card: Health + Wellness -->
-  <div class="card card-medium">
+  <!-- Second Card: Health + Wellness (Updated layout) -->
+  <div class="card">
     <div class="card-title">Health + Wellness Package</div>
     <div class="package-row">
       <div class="package-image" id="monthImageContainer">
@@ -165,32 +354,13 @@
   </div>
 
   <!-- Third Card: Wedding Checklist -->
-  <div class="card card-medium">
+  <div class="card">
     <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
     <div class="package-content" style="text-align:center;">(Coming soon)</div>
   </div>
-
-  <!-- Additional small cards -->
-  <div class="card card-small">
-    <div class="card-title">New Image Box 1</div>
-    <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68" style="width:100%; border-radius:10px;">
-  </div>
-  <div class="card card-small">
-    <div class="card-title">New Image Box 2</div>
-    <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d" style="width:100%; border-radius:10px;">
-  </div>
-  <div class="card card-small">
-    <div class="card-title">New Image Box 3</div>
-    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" style="width:100%; border-radius:10px;">
-  </div>
-  <div class="card card-small">
-    <div class="card-title">New Image Box 4</div>
-    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" style="width:100%; border-radius:10px;">
-  </div>
-
 </div>
 
-<!-- Modals remain the same -->
+<!-- Existing Modal -->
 <div class="modal" id="modal" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <img id="modalImage">
@@ -199,6 +369,7 @@
   </div>
 </div>
 
+<!-- FAQ Modal for second card -->
 <div class="modal" id="faqModal" onclick="closeFAQModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
     <img id="faqImage" src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="">
@@ -206,89 +377,121 @@
   </div>
 </div>
 
+<!-- Fullscreen Image -->
 <div class="fullscreen" id="fullscreen" onclick="closeFullscreen()">
   <div class="fullscreen-close" onclick="closeFullscreen()">×</div>
   <img id="fullscreenImg">
 </div>
 
 <script>
+  // Original Payment Gateway logic
   const nameData = {
-    james: { option1:0, option2:0, option3:0, option4:0, option5:0 },
-    allen: { option1:532, option2:719, option3:324, option4:100, option5:115 },
-    nikki: { option1:169, option2:0, option3:0, option4:0, option5:0 },
-    aj: { option1:208, option2:368, option3:0, option4:0, option5:0 },
-    anjo: { option1:432, option2:637, option3:224, option4:0, option5:0 },
-    sean: { option1:532, option2:757, option3:324, option4:100, option5:115 },
-    kath: { option1:532, option2:687, option3:324, option4:100, option5:115 },
-    celine: { option1:417, option2:802, option3:209, option4:15, option5:0 }
+    james:  { option1: 0, option2: 0, option3: 0, option4: 0, option5: 0 },
+    allen:  { option1: 532, option2: 719, option3: 324, option4: 100, option5: 115 },
+    nikki:  { option1: 169, option2: 0, option3: 0, option4: 0, option5: 0 },
+    aj:     { option1: 208, option2: 368, option3: 0, option4: 0, option5: 0 },
+    anjo:   { option1: 432, option2: 637, option3: 224, option4: 0, option5: 0 },
+    sean:   { option1: 532, option2: 757, option3: 324, option4: 100, option5: 115 },
+    kath:   { option1: 532, option2: 687, option3: 324, option4: 100, option5: 115 },
+    celine: { option1: 417, option2: 802, option3: 209, option4: 15, option5: 0 }
   };
 
   let currentUser = "";
 
-  function sanitize(input){ return input.toLowerCase().replace(/\s+/g,"").trim(); }
-  function unlock(){
-    const raw=document.getElementById("username").value;
-    const input=sanitize(raw);
-    if(!input){ alert("Please enter your name!"); return; }
-    if(!nameData[input]){ alert("Name not recognized!"); return; }
-    currentUser=input;
-    document.getElementById("nameBox").style.display="none";
-    document.getElementById("welcomeText").textContent="Welcome "+raw.trim()+"!";
-    document.getElementById("buttonGroup").style.display="block";
-    document.getElementById("buttonGroup").querySelectorAll("button").forEach(btn=>btn.disabled=false);
-    document.getElementById("resetUser").style.display="block";
-  }
-  function resetUser(){
-    document.getElementById("username").value="";
-    document.getElementById("buttonGroup").style.display="none";
-    document.getElementById("welcomeText").innerText="";
-    document.getElementById("resetUser").style.display="none";
-    document.getElementById("nameBox").style.display="block";
+  function sanitize(input) {
+    return input.toLowerCase().replace(/\s+/g, "").trim();
   }
 
-  function openModal(imageSrc, optionKey){
-    document.getElementById("modalImage").src=imageSrc;
-    const amount=nameData[currentUser][optionKey];
-    document.getElementById("amountText").textContent="Amount: ₱"+amount;
-    document.getElementById("modal").style.display="flex";
+  function unlock() {
+    const raw = document.getElementById("username").value;
+    const input = sanitize(raw);
+
+    if (!input) { alert("Please enter your name!"); return; }
+    if (!nameData[input]) { alert("Name not recognized!"); return; }
+
+    currentUser = input;
+    document.getElementById("nameBox").style.display = "none";
+    document.getElementById("welcomeText").textContent = "Welcome " + raw.trim() + "!";
+    document.getElementById("buttonGroup").style.display = "block";
+
+    document.getElementById("buttonGroup").querySelectorAll("button").forEach(btn => {
+      btn.disabled = false;
+    });
+
+    document.getElementById("resetUser").style.display = "block";
   }
-  function closeModal(){ document.getElementById("modal").style.display="none"; document.getElementById("modalImage").src=""; document.getElementById("amountText").textContent=""; }
 
-  function openFullscreen(src){ document.getElementById("fullscreenImg").src=src; document.getElementById("fullscreen").style.display="flex"; }
-  function closeFullscreen(){ document.getElementById("fullscreen").style.display="none"; document.getElementById("fullscreenImg").src=""; }
-
-  function openFAQModal(){
-    const faq=document.getElementById("faqModal");
-    const content=faq.querySelector(".modal-content");
-    faq.style.display="flex";
-    content.style.transform="scale(0.92)";
-    content.style.opacity="0";
-    setTimeout(()=>{ content.style.transform="scale(1)"; content.style.opacity="1"; },10);
+  function resetUser() {
+    document.getElementById("username").value = "";
+    document.getElementById("buttonGroup").style.display = "none";
+    document.getElementById("welcomeText").innerText = "";
+    document.getElementById("resetUser").style.display = "none";
+    document.getElementById("nameBox").style.display = "block";
   }
-  function closeFAQModal(){ document.getElementById("faqModal").style.display="none"; }
 
-  // Month holder logic
+  function openFAQModal() {
+    const faq = document.getElementById("faqModal");
+    const content = faq.querySelector(".modal-content");
+    faq.style.display = "flex";
+    content.style.transform = "scale(0.92)";
+    content.style.opacity = "0";
+    setTimeout(() => { content.style.transform = "scale(1)"; content.style.opacity = "1"; }, 10);
+  }
+
+  function closeFAQModal() { document.getElementById("faqModal").style.display = "none"; }
+
+  function openModal(imageSrc, optionKey) {
+    document.getElementById("modalImage").src = imageSrc;
+    const amount = nameData[currentUser][optionKey];
+    document.getElementById("amountText").textContent = "Amount: ₱" + amount;
+    document.getElementById("modal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("modal").style.display = "none";
+    document.getElementById("modalImage").src = "";
+    document.getElementById("amountText").textContent = "";
+  }
+
+  function openFullscreen(src) {
+    document.getElementById("fullscreenImg").src = src;
+    document.getElementById("fullscreen").style.display = "flex";
+  }
+
+  function closeFullscreen() {
+    document.getElementById("fullscreen").style.display = "none";
+    document.getElementById("fullscreenImg").src = "";
+  }
+
+  // Dynamic month image and holder
   const monthlyHolders = {
-    January:{ img:"https://images.unsplash.com/photo-1544005313-94ddf0286df2", name:"James" },
-    February:{ img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", name:"Nikki" },
-    March:{ img:"https://images.unsplash.com/photo-1494790108377-be9c29b29330", name:"AJ" },
-    April:{ img:"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e", name:"Anjo" },
-    May:{ img:"https://images.unsplash.com/photo-1517841905240-472988babdf9", name:"Celine" },
-    June:{ img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1", name:"Sean" },
-    July:{ img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce", name:"Kath" },
-    August:{ img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e", name:"Allen" },
-    September:{ img:"https://images.unsplash.com/photo-1520813792240-56fc4a3765a7", name:"Mika" },
-    October:{ img:"https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d", name:"Leo" },
-    November:{ img:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1", name:"Tina" },
-    December:{ img:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce", name:"Mark" }
+    January:  { img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2", name: "James" },
+    February: { img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d", name: "Nikki" },
+    March:    { img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330", name: "AJ" },
+    April:    { img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e", name: "Anjo" },
+    May:      { img: "https://images.unsplash.com/photo-1517841905240-472988babdf9", name: "Celine" },
+    June:     { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", name: "Sean" },
+    July:     { img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce", name: "Kath" },
+    August:   { img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e", name: "Allen" },
+    September:{ img: "https://images.unsplash.com/photo-1520813792240-56fc4a3765a7", name: "Mika" },
+    October:  { img: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d", name: "Leo" },
+    November: { img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1", name: "Tina" },
+    December: { img: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce", name: "Mark" }
   };
-  const now=new Date();
-  const monthNames=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const currentMonthName=monthNames[now.getMonth()];
-  document.getElementById("currentMonth").textContent=currentMonthName;
-  const monthData=monthlyHolders[currentMonthName];
-  if(monthData){ document.getElementById("monthImage").src=monthData.img; document.getElementById("monthHolderName").textContent=monthData.name; }
-</script>
 
+  const now = new Date();
+  const monthNames = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+  const currentMonthName = monthNames[now.getMonth()];
+  document.getElementById("currentMonth").textContent = currentMonthName;
+
+  const monthData = monthlyHolders[currentMonthName];
+  if(monthData){
+    document.getElementById("monthImage").src = monthData.img;
+    document.getElementById("monthHolderName").textContent = monthData.name;
+  }
+</script>
 </body>
 </html>
