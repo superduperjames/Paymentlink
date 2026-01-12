@@ -487,19 +487,22 @@ textarea {
 /* Gallery wrapper */
 .celebrant-gallery-wrapper {
   position: relative;
-  display: block;
+  display: flex;
   align-items: center;
+  justify-content: center;
   margin: 10px 0;
-  gap: 4px;
+  gap: 8px;
 }
 
 /* 2x2 Birthday gallery grid */
 .celebrant-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 100px);
   grid-template-rows: repeat(2, 100px);
   gap: 6px;
 }
+
+/* Gallery images */
 .celebrant-gallery-grid img {
   width: 100%;
   height: 100%;
@@ -511,19 +514,23 @@ textarea {
 .celebrant-gallery-grid img:hover {
   transform: scale(1.05);
 }
-    
-/* Arrows */
+
+/* Gallery arrows */
 .gallery-arrow {
   background: #1a202c;
   color: #fff;
   font-size: 24px;
   border: none;
   border-radius: 6px;
-  padding: 0 10px;
+  padding: 6px 10px;
   cursor: pointer;
   user-select: none;
+  transition: background 0.2s;
 }
-.gallery-arrow:hover { background: #2d3748; }
+.gallery-arrow:hover { 
+  background: #2d3748; 
+}
+
 
 /* Fullscreen */
 .fullscreen {
@@ -1010,59 +1017,94 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-    const monthNames = Object.keys(birthdayData);
+    const monthNames = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
   const currentMonth = monthNames[new Date().getMonth()];
   const data = birthdayData[currentMonth];
   if (!data) return;
 
+  // ======================
+  // TEXT
+  // ======================
   document.getElementById("celebrantNameText").textContent = data.name.join(", ");
   document.getElementById("currentCelebrantDate").textContent = data.date.join(", ");
   document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
 
-  // Greet button
+  // ======================
+  // GREET BUTTON
+  // ======================
   document.getElementById("greetButton").onclick = () => {
-    // Replace with your actual link
     window.open("https://example.com/greet", "_blank");
   };
 
-  // Gallery pagination (2x2)
+  // ======================
+  // GALLERY (2x2 PAGED)
+  // ======================
   const gallery = document.getElementById("celebrantGallery");
-  let galleryIndex = 0;
+  const prevArrow = document.getElementById("prevGallery");
+  const nextArrow = document.getElementById("nextGallery");
+
   const pageSize = 4;
+  let pageIndex = 0;
+  const totalPages = Math.ceil(data.gallery.length / pageSize);
 
   function renderGallery() {
     gallery.innerHTML = "";
-    const page = data.gallery.slice(galleryIndex, galleryIndex + pageSize);
-    page.forEach(src => {
+    const start = pageIndex * pageSize;
+    const end = start + pageSize;
+
+    data.gallery.slice(start, end).forEach(src => {
       const img = document.createElement("img");
       img.src = src;
       img.alt = "Celebrant Image";
+
       img.onclick = () => {
         document.getElementById("celebrantFullscreenImg").src = src;
         document.getElementById("celebrantFullscreen").style.display = "flex";
       };
+
       gallery.appendChild(img);
     });
   }
 
-  document.getElementById("prevGallery").onclick = () => {
-    galleryIndex -= pageSize;
-    if (galleryIndex < 0) galleryIndex = Math.max(0, data.gallery.length - pageSize);
+  prevArrow.onclick = () => {
+    pageIndex = (pageIndex - 1 + totalPages) % totalPages;
     renderGallery();
   };
-  document.getElementById("nextGallery").onclick = () => {
-    galleryIndex += pageSize;
-    if (galleryIndex >= data.gallery.length) galleryIndex = 0;
+
+  nextArrow.onclick = () => {
+    pageIndex = (pageIndex + 1) % totalPages;
     renderGallery();
   };
+
+  // Hide arrows if unnecessary
+  if (data.gallery.length <= pageSize) {
+    prevArrow.style.display = "none";
+    nextArrow.style.display = "none";
+  }
 
   renderGallery();
 
-  // Close fullscreen
-  document.getElementById("celebrantFullscreenClose").onclick = () => {
-    document.getElementById("celebrantFullscreen").style.display = "none";
-    document.getElementById("celebrantFullscreenImg").src = "";
+  // ======================
+  // FULLSCREEN CLOSE
+  // ======================
+  const fullscreen = document.getElementById("celebrantFullscreen");
+  const fullscreenImg = document.getElementById("celebrantFullscreenImg");
+
+  document.getElementById("celebrantFullscreenClose").onclick = (e) => {
+    e.stopPropagation();
+    fullscreen.style.display = "none";
+    fullscreenImg.src = "";
   };
+
+  fullscreen.onclick = () => {
+    fullscreen.style.display = "none";
+    fullscreenImg.src = "";
+  };
+
 });
 </script>
 
