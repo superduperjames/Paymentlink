@@ -712,47 +712,28 @@ textarea {
   }
 }
 
-    /* =========================================
-   IMAGE BOX 3 – RANDOMIZER (ISOLATED)
-========================================= */
+/* Shrink only the randomizer card visually */
 .image-box-3 {
-  text-align: center;
+  height: 50%;      /* visual “half-height” */
+  min-height: 180px; /* prevent it from collapsing too small */
 }
 
+/* Adjust content inside */
 .image-box-3 .randomizer-result {
-  margin: 14px 0;
-  padding: 16px 12px;
-  border-radius: 12px;
-  background: rgba(0,0,0,0.1);
-  font-size: 50px;
-  font-weight: 700;
-  color: #1a202c;
-  min-height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 18px;
+  min-height: 44px;
+  margin-bottom: 8px;
 }
 
-.image-box-3 .randomizer-btn {
-  width: 100%;
-  padding: 14px 12px;
-  border-radius: 10px;
-  border: none;
-  background: #1a202c;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+/* Add breathing room between cards */
+.image-box-3-secondary {
+  min-height: 180px;
+  padding: 16px;
 }
-
-.image-box-3 .randomizer-btn:active {
-  transform: scale(0.98);
-}
-
-/* Mobile breathing room */
-@media (max-width: 640px) {
-  .image-box-3 {
-    padding: 20px;
+    @media (max-width: 640px) {
+  .image-box-3,
+  .image-box-3-secondary {
+    width: 100%;  /* full width on mobile */
   }
 }
 /* =========================================
@@ -986,26 +967,17 @@ textarea {
 </div>
 
   
-<div class="card-stack">
-  <div class="card card-small image-box-3">
-    <!-- Randomizer card -->
-  </div>
-
-  <div class="card card-small image-box-3-secondary">
-    <div class="card-title">Secondary Card</div>
-    <p>Add your content here</p>
-  </div>
+<div class="card image-box-3">
+  <div class="card-title">Random Picker</div>
+  <div id="randomizerResult" class="randomizer-result"></div>
+  <button onclick="triggerRandomizer()">Pick</button>
 </div>
-  <div class="card-title">Random Name Picker</div>
 
-  <div class="randomizer-result" id="randomizerResult">
-    Tap to unlock & pick
-  </div>
-
-  <button class="randomizer-btn" onclick="triggerRandomizer()">
-    Pick a Random Name
-  </button>
+<div class="card image-box-3-secondary">
+  <div class="card-title">Secondary Card</div>
+  <p>Content for the new card goes here</p>
 </div>
+
 
   
 <div class="card card-small gallery-card">
