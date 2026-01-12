@@ -689,7 +689,7 @@ textarea {
 
 <!-- Fullscreen overlay -->
 <div class="fullscreen" id="celebrantFullscreen">
-  <div class="fullscreen-close" onclick="closeCelebrantFullscreen()">×</div>
+  <div class="fullscreen-close" id="celebrantFullscreenClose">×</div>
   <img id="celebrantFullscreenImg">
 </div>
 
@@ -1024,50 +1024,37 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("currentCelebrantDate").textContent = displayCurrent.date.join(", ");
 
   // Load gallery
-  const galleryContainer = document.getElementById("celebrantGallery");
-  galleryContainer.innerHTML = "";
-  if(displayCurrent.gallery && displayCurrent.gallery.length){
-    displayCurrent.gallery.forEach(src => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.alt = "Celebrant Image";
-      img.addEventListener("click", () => {
-        document.getElementById("celebrantFullscreenImg").src = src;
-        document.getElementById("celebrantFullscreen").style.display = "flex";
-      });
-      galleryContainer.appendChild(img);
+const galleryContainer = document.getElementById("celebrantGallery");
+galleryContainer.innerHTML = "";
+if(displayCurrent.gallery && displayCurrent.gallery.length){
+  displayCurrent.gallery.forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = "Celebrant Image";
+
+    // Add click listener inside the loop
+    img.addEventListener("click", () => {
+      document.getElementById("celebrantFullscreenImg").src = src;
+      document.getElementById("celebrantFullscreen").style.display = "flex";
     });
-  }
 
-  // Scroll gallery function - snaps 4 images
-  window.scrollGallery = function(direction){
-    const galleryWidth = galleryContainer.clientWidth;
-    galleryContainer.scrollBy({ left: direction * galleryWidth, behavior: "smooth" });
-  };
+    galleryContainer.appendChild(img);
+  });
+}
 
-  // Next month ticker
-  const nextCelebrants = nextData.next && nextData.next.length > 0 ? nextData.next : nextData.name;
-  let nextIndex = 0;
-  const nextElem = document.getElementById("nextCelebrantName");
-  nextElem.textContent = nextCelebrants[nextIndex];
+// Fullscreen close button
+const fsCloseBtn = document.getElementById("celebrantFullscreenClose");
+fsCloseBtn.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent overlay click
+  document.getElementById("celebrantFullscreen").style.display = "none";
+  document.getElementById("celebrantFullscreenImg").src = "";
+});
 
-  setInterval(() => {
-    nextIndex = (nextIndex + 1) % nextCelebrants.length;
-    nextElem.textContent = nextCelebrants[nextIndex];
-  }, 3000);
-
-  // Greet button
-  window.greetLink = function() {
-    const url = "https://example.com/greet"; // replace with your link
-    window.open(url, "_blank");
-  };
-
-  // Close fullscreen
-  window.closeCelebrantFullscreen = function() {
-    const fs = document.getElementById("celebrantFullscreen");
-    fs.style.display = "none";
-    document.getElementById("celebrantFullscreenImg").src = "";
-  };
+// Close when clicking outside the image
+const fsOverlay = document.getElementById("celebrantFullscreen");
+fsOverlay.addEventListener("click", () => {
+  fsOverlay.style.display = "none";
+  document.getElementById("celebrantFullscreenImg").src = "";
 });
 </script>
 
