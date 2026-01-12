@@ -431,95 +431,76 @@ textarea {
   color: #1a202c;
 }
 
-/* Birthday Card Styling */
+/* Card Styling */
 .birthday-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
   background: #e9763d;
   border-radius: 14px;
+  padding: 16px;
   color: #fff;
-  text-align: center;
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Card title */
-.birthday-card .card-title {
-  font-size: 20px;
-  color:black;
-  font-weight: 700;
-}
-
 /* Current celebrant */
-.celebrant-current .celebrant-name {
-  font-size: 48px;
+.celebrant-current {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.celebrant-name {
+  font-size: 18px;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
-
-.celebrant-current .cake-icon {
-  display: inline-block;
-  font-size: 40px;
-  transition: transform 0.3s ease;
-}
-
-.celebrant-current:hover .cake-icon {
-  transform: rotate(-15deg) scale(1.2);
-}
-
-.celebrant-current .celebrant-date {
+.celebrant-date {
   font-size: 14px;
-  font-weight: 500;
   margin-top: 2px;
+  color: #fff;
 }
+.cake-icon { margin-right: 6px; }
 
-/* Next month */
+/* Next celebrant */
 .celebrant-next {
-  font-size: 15px;
-  min-height: 18px; /* prevents layout shift when cycling names */
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
 }
 
 /* Greet button */
-.birthday-card .celebrant-action button {
-  margin-top: 8px;
-  padding: 10px 14px;
+.celebrant-action {
+  text-align: center;
+  margin-top: 10px;
+}
+.celebrant-action button {
+  background: #1a202c;
+  color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  background: #FCE694;
-  color: #fff;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
+  font-family: 'Montserrat', sans-serif;
+}
+.celebrant-action button:hover {
+  background: #2d3748;
 }
 
-.birthday-card .celebrant-action button:hover {
-  transform: scale(1.05);
-  background: #FFBF46;
-}
 /* Gallery wrapper */
 .celebrant-gallery-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  margin: 10px 0;
   gap: 4px;
-  margin-top: 10px;
 }
 
+/* Gallery container */
 .celebrant-gallery {
   display: flex;
-  overflow: hidden; /* hide extra images */
-  gap: 6px;
-  scroll-behavior: smooth;
+  overflow: hidden;
   flex: 1;
+  gap: 6px;
 }
 
+/* Gallery images */
 .celebrant-gallery img {
-  width: calc((100% - 18px) / 4); /* 4 images per view, adjust gap */
+  width: calc((100% - 18px) / 4); /* 4 images visible at a time */
   height: 100px;
   object-fit: cover;
   border-radius: 6px;
@@ -527,11 +508,11 @@ textarea {
   flex-shrink: 0;
   transition: transform 0.2s ease;
 }
-
 .celebrant-gallery img:hover {
   transform: scale(1.05);
 }
 
+/* Arrows */
 .gallery-arrow {
   background: #1a202c;
   color: #fff;
@@ -542,29 +523,32 @@ textarea {
   cursor: pointer;
   user-select: none;
 }
+.gallery-arrow:hover { background: #2d3748; }
 
-.gallery-arrow:hover {
-  background: #2d3748;
+/* Fullscreen */
+.fullscreen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
 }
-
-/* Fullscreen overlay */
-#celebrantFullscreen img {
+.fullscreen img {
   max-width: 95%;
   max-height: 95%;
   border-radius: 12px;
 }
-
-#celebrantFullscreen .fullscreen-close {
+.fullscreen-close {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  right: 20px;
   font-size: 28px;
   color: #fff;
   cursor: pointer;
   font-weight: 600;
 }
-
-
     
   </style>
 </head>
@@ -674,31 +658,30 @@ textarea {
 <div class="card card-small birthday-card">
   <div class="card-title">Birthday Celebrant</div>
 
-  <!-- Current Celebrant -->
+  <!-- Current Celebrant Name and Date -->
   <div class="celebrant-current">
-    <div class="celebrant-name" id="currentCelebrantName">
+    <div class="celebrant-name">
       <span class="cake-icon">🎂</span>
       <span id="celebrantNameText">[Name]</span>
     </div>
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- Horizontal scrollable gallery -->
-<div class="celebrant-gallery-wrapper">
-  <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
-  <div class="celebrant-gallery" id="celebrantGallery">
-    <!-- Images dynamically loaded here -->
+  <!-- Horizontal scrollable gallery with arrows -->
+  <div class="celebrant-gallery-wrapper">
+    <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
+    <div class="celebrant-gallery" id="celebrantGallery">
+      <!-- Images dynamically loaded here -->
+    </div>
+    <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
   </div>
-  <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
-</div>
 
-
-  <!-- Next month -->
+  <!-- Next Month -->
   <div class="celebrant-next">
     Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
 
-  <!-- Greet button -->
+  <!-- Greet Button -->
   <div class="celebrant-action">
     <button id="greetButton" onclick="greetLink()">Greet them here!</button>
   </div>
@@ -709,7 +692,6 @@ textarea {
   <div class="fullscreen-close" onclick="closeCelebrantFullscreen()">×</div>
   <img id="celebrantFullscreenImg">
 </div>
-
 
 
 
@@ -951,15 +933,15 @@ document.addEventListener("DOMContentLoaded", loadChecklist);
   <script>
 document.addEventListener("DOMContentLoaded", function() {
   const birthdayData = {
-        January: { 
-      name: ["Anjo"], 
-      date: ["January 28"], 
+ January: { 
+      name: ["Sean"], 
+      date: ["Jan 12"], 
       next: ["Anjo", "Allen"],
       gallery: [
         "https://via.placeholder.com/100?text=Sean1",
         "https://via.placeholder.com/100?text=Sean2",
         "https://via.placeholder.com/100?text=Sean3",
-        "https://via.placeholder.com/100?text=Sean4",
+        "https://via.placeholder.com/100?text=Sean4"
       ]
     },
     April: { 
@@ -992,7 +974,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Celine4"
       ]
     },
-        October: { 
+     October: { 
       name: ["Kath"], 
       date: ["Oct 30"], 
       next: ["Nikki"],
@@ -1000,21 +982,21 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=Kath1",
         "https://via.placeholder.com/100?text=Kath2",
         "https://via.placeholder.com/100?text=Kath3",
-        "https://via.placeholder.com/100?text=Kath4",
+        "https://via.placeholder.com/100?text=Kath4"
       ]
-        },
-        November: { 
+    },
+     November: { 
       name: ["Nikki"], 
       date: ["Nov 7"], 
       next: ["James"],
       gallery: [
         "https://via.placeholder.com/100?text=Nikki1",
-        "https://via.placeholder.com/100?text=Nikki2",
+        "https://via.placeholder.com/100?text=Nikk2",
         "https://via.placeholder.com/100?text=Nikki3",
-        "https://via.placeholder.com/100?text=Nikki4",
+        "https://via.placeholder.com/100?text=Nikki4"
       ]
     },
-          December: { 
+     December: { 
       name: ["James"], 
       date: ["Dec 5"], 
       next: ["Sean"],
@@ -1022,11 +1004,11 @@ document.addEventListener("DOMContentLoaded", function() {
         "https://via.placeholder.com/100?text=James1",
         "https://via.placeholder.com/100?text=James2",
         "https://via.placeholder.com/100?text=James3",
-        "https://via.placeholder.com/100?text=James4",
+        "https://via.placeholder.com/100?text=James4"
       ]
-    },
-  };
-
+    }
+     };
+  
   const now = new Date();
   const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   const currentMonth = monthNames[now.getMonth()];
@@ -1057,12 +1039,10 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Scroll gallery function - snaps by 4 images
+  // Scroll gallery function - snaps 4 images
   window.scrollGallery = function(direction){
     const galleryWidth = galleryContainer.clientWidth;
-    const imgCount = 4; // show 4 images at a time
-    const scrollAmount = galleryWidth; // scroll full width of 4 images
-    galleryContainer.scrollBy({ left: direction * scrollAmount, behavior: "smooth" });
+    galleryContainer.scrollBy({ left: direction * galleryWidth, behavior: "smooth" });
   };
 
   // Next month ticker
