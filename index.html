@@ -501,6 +501,54 @@ textarea {
   transform: scale(2.05);
   background: #FFBF46;
 }
+/* Birthday Card Gallery (2x2) */
+.celebrant-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.celebrant-gallery img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.celebrant-gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* Fullscreen overlay */
+#celebrantFullscreen {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+}
+
+#celebrantFullscreen img {
+  max-width: 95%;
+  max-height: 95%;
+  border-radius: 12px;
+}
+
+#celebrantFullscreen .fullscreen-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 28px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
 
 
     
@@ -621,7 +669,16 @@ textarea {
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- Next month (dynamic) -->
+  <!-- Image Gallery (2x2) -->
+  <div class="celebrant-gallery" id="celebrantGallery">
+    <!-- Placeholder images -->
+    <img src="https://via.placeholder.com/100" alt="Gallery Image 1">
+    <img src="https://via.placeholder.com/100" alt="Gallery Image 2">
+    <img src="https://via.placeholder.com/100" alt="Gallery Image 3">
+    <img src="https://via.placeholder.com/100" alt="Gallery Image 4">
+  </div>
+
+  <!-- Next month -->
   <div class="celebrant-next">
     Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
@@ -631,6 +688,13 @@ textarea {
     <button id="greetButton" onclick="greetLink()">Greet them here!</button>
   </div>
 </div>
+
+<!-- Fullscreen overlay -->
+<div class="fullscreen" id="celebrantFullscreen">
+  <div class="fullscreen-close" onclick="closeCelebrantFullscreen()">×</div>
+  <img id="celebrantFullscreenImg">
+</div>
+
 
 
   <div class="card card-small">
@@ -918,6 +982,26 @@ document.addEventListener("DOMContentLoaded", function() {
     const url = "https://example.com/greet"; // replace with your link
     window.open(url, "_blank");
   }
+});
+</script>
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Birthday gallery click to fullscreen
+  const galleryImgs = document.querySelectorAll("#celebrantGallery img");
+  const fullscreen = document.getElementById("celebrantFullscreen");
+  const fullscreenImg = document.getElementById("celebrantFullscreenImg");
+
+  galleryImgs.forEach(img => {
+    img.addEventListener("click", () => {
+      fullscreenImg.src = img.src;
+      fullscreen.style.display = "flex";
+    });
+  });
+
+  window.closeCelebrantFullscreen = function() {
+    fullscreen.style.display = "none";
+    fullscreenImg.src = "";
+  };
 });
 </script>
 
