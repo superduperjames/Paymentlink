@@ -468,20 +468,12 @@ textarea {
 }
     
 /* Gallery card styling ---------------------------------------------*/
-/* Shrink Gallery Card */
 .gallery-card {
-  background: #ABE188; 
+  background: #ABE188; /* change this to any color you like */
   border-radius: 14px;
   padding: 16px;
-  color: #fff; 
+  color: #fff; /* text color */
   font-family: 'Montserrat', sans-serif;
-
-  height: 50%;          /* Half the height */
-  min-height: 200px;    /* ensures it doesn't collapse too much */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* centers content vertically */
-  overflow: hidden;     /* prevents overflowing content */
 }
 
 /* Fullscreen */
@@ -508,7 +500,6 @@ textarea {
   cursor: pointer;
   font-weight: 600;
 }
-  
 
 
     /* Highlights gallery --------------------------------*/
@@ -521,10 +512,11 @@ textarea {
 }
 .highlights-grid img {
   width: 100%;
-  height: auto;
-  max-height: 100%;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 .highlights-grid img:hover {
   transform: scale(1.04);
@@ -720,28 +712,47 @@ textarea {
   }
 }
 
-/* Shrink only the randomizer card visually */
+    /* =========================================
+   IMAGE BOX 3 – RANDOMIZER (ISOLATED)
+========================================= */
 .image-box-3 {
-  height: 50%;      /* visual “half-height” */
-  min-height: 180px; /* prevent it from collapsing too small */
+  text-align: center;
 }
 
-/* Adjust content inside */
 .image-box-3 .randomizer-result {
-  font-size: 18px;
-  min-height: 44px;
-  margin-bottom: 8px;
+  margin: 14px 0;
+  padding: 16px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.1);
+  font-size: 50px;
+  font-weight: 700;
+  color: #1a202c;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Add breathing room between cards */
-.image-box-3-secondary {
-  min-height: 180px;
-  padding: 16px;
+.image-box-3 .randomizer-btn {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #1a202c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
-    @media (max-width: 640px) {
-  .image-box-3,
-  .image-box-3-secondary {
-    width: 100%;  /* full width on mobile */
+
+.image-box-3 .randomizer-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobile breathing room */
+@media (max-width: 640px) {
+  .image-box-3 {
+    padding: 20px;
   }
 }
 /* =========================================
@@ -789,34 +800,6 @@ textarea {
 .image-box-3 .randomizer-result.shuffling {
   transform: scale(1.03);
   opacity: 0.85;
-}
-/* =========================================
-   STACKED CARDS (DESKTOP + MOBILE SAFE)
-========================================= */
-.card-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Make the randomizer card more compact */
-.image-box-3 {
-  padding: 14px;
-}
-
-.image-box-3 .randomizer-result {
-  font-size: 18px;
-  min-height: 44px;
-}
-
-/* Secondary card matches scale */
-.image-box-3-secondary {
-  padding: 14px;
-}
-@media (max-width: 640px) {
-  .card-stack {
-    gap: 20px;
-  }
 }
 
 
@@ -975,17 +958,17 @@ textarea {
 </div>
 
   
-<div class="card image-box-3">
-  <div class="card-title">Random Picker</div>
-  <div id="randomizerResult" class="randomizer-result"></div>
-  <button onclick="triggerRandomizer()">Pick</button>
-</div>
+<div class="card card-small image-box-3">
+  <div class="card-title">Random Name Picker</div>
 
-<div class="card image-box-3-secondary">
-  <div class="card-title">Secondary Card</div>
-  <p>Content for the new card goes here</p>
-</div>
+  <div class="randomizer-result" id="randomizerResult">
+    Tap to unlock & pick
+  </div>
 
+  <button class="randomizer-btn" onclick="triggerRandomizer()">
+    Pick a Random Name
+  </button>
+</div>
 
   
 <div class="card card-small gallery-card">
