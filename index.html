@@ -284,10 +284,9 @@ textarea {
   font-family: 'Montserrat', sans-serif;
   color: #1a202c;
   padding: 16px;
-        background: pink;
-      border-radius: 14px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-      color: #1a202c;
+  background: #d8bbfc; /* Card background color */
+  border-radius: 16px; /* Match card rounding */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* Card title */
@@ -311,7 +310,7 @@ textarea {
 .wedding-card .progress-bar-bg {
   width: 90%;
   height: 10px;
-  background: rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.4); /* lighter over colored card */
   border-radius: 999px;
   overflow: hidden;
 }
@@ -329,6 +328,7 @@ textarea {
 .wedding-card .progress-label {
   font-size: 14px;
   font-weight: 600;
+  color: #1a202c;
 }
 
 /* Toggle checklist link */
@@ -352,8 +352,8 @@ textarea {
   align-items: center;
   gap: 12px;
   padding: 8px 12px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.75);
+  border-radius: 10px; /* slight rounding for items */
+  background: rgba(255,255,255,0.35); /* semi-transparent to blend with card */
   transition: background 0.25s ease;
 }
 
@@ -407,8 +407,6 @@ textarea {
   cursor: pointer;
   color: #1a202c;
 }
-
-
 
   </style>
 </head>
