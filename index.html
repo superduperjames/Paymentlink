@@ -550,6 +550,33 @@ textarea {
   cursor: pointer;
   font-weight: 600;
 }
+.celebrant-gallery-wrapper {
+  position: relative;
+  overflow: hidden; /* hide overflow */
+}
+
+.celebrant-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(2, 100px);  /* 2 rows */
+  gap: 6px;
+  transition: transform 0.4s ease; /* smooth scroll with JS */
+  width: max-content; /* necessary for horizontal scroll */
+}
+
+.celebrant-gallery-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.celebrant-gallery-grid img:hover {
+  transform: scale(1.05);
+}
+
     
   </style>
 </head>
@@ -668,14 +695,15 @@ textarea {
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- Horizontal scrollable gallery with arrows -->
-  <div class="celebrant-gallery-wrapper">
-    <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
-    <div class="celebrant-gallery" id="celebrantGallery">
-      <!-- Images dynamically loaded here -->
-    </div>
-    <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
+<div class="celebrant-gallery-wrapper">
+  <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
+  <div class="celebrant-gallery-grid" id="celebrantGallery">
+    <!-- Images dynamically loaded here -->
   </div>
+  <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
+</div>
+
+
 
 <!-- Greet Button -->
 <div class="celebrant-action">
@@ -1021,7 +1049,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Next celebrant
   document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
 
-  // Populate gallery
+ // Populate gallery
   const galleryContainer = document.getElementById("celebrantGallery");
   galleryContainer.innerHTML = "";
   data.gallery.forEach(src => {
@@ -1042,22 +1070,27 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 });
 
-// Separate gallery scroll for celebrant gallery
+// Unified scroll function for 2x2 grid
 let celebrantGalleryIndex = 0;
+
 function scrollGallery(direction) {
   const gallery = document.getElementById("celebrantGallery");
-  const visible = 4; // 4 images visible
-  const total = gallery.children.length;
+  const images = gallery.children;
+  const rowsVisible = 2;   // 2 rows
+  const colsVisible = 2;   // 2 columns per scroll
+  const totalCols = Math.ceil(images.length / rowsVisible); // total column sets
 
   celebrantGalleryIndex += direction;
-  celebrantGalleryIndex = Math.max(0, Math.min(celebrantGalleryIndex, total - visible));
+  celebrantGalleryIndex = Math.max(0, Math.min(celebrantGalleryIndex, totalCols - colsVisible));
 
-  const imageWidth = gallery.children[0].offsetWidth + 6; // gap = 6px
-  gallery.style.transform = `translateX(-${celebrantGalleryIndex * imageWidth}px)`;
+  const columnWidth = images[0].offsetWidth + 6; // width + gap
+  gallery.style.transform = `translateX(-${celebrantGalleryIndex * columnWidth}px)`;
 }
 
 // Greet button placeholder
-function greetLink() { alert("Greet functionality can be implemented here!"); }
+function greetLink() {
+  alert("Greet functionality can be implemented here!");
+}
 </script>
 
 
