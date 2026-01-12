@@ -279,21 +279,37 @@ textarea {
     /* FAQ button */
     .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #a8cdf0; color: #fff; cursor: pointer; margin-top: 10px; }
 
-    /* Wedding checklist */
+/* Wedding checklist */
 .wedding-card {
+  color: #1a202c;
+}
+
+/* Progress bar */
+.progress-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
-.checklist-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  margin-bottom: 12px;
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-.progress-text {
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #1a202c;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.progress-label {
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -305,41 +321,59 @@ textarea {
   cursor: pointer;
 }
 
-.checklist-body {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* Sections */
+.checklist-section {
+  margin-bottom: 14px;
 }
 
+.checklist-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Items */
 .checklist-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.5);
-  transition: background 0.25s ease, opacity 0.25s ease;
+  background: rgba(255,255,255,0.75);
+  transition: background 0.25s ease;
+}
+
+.checklist-item span {
+  position: relative;
+}
+
+/* Animated strike-through */
+.checklist-item.done span::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background: #1a202c;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: strike 0.35s ease forwards;
+}
+
+@keyframes strike {
+  to { transform: scaleX(1); }
 }
 
 .checklist-item.done {
   opacity: 0.6;
-  text-decoration: line-through;
 }
 
 .checklist-item input {
   transform: scale(1.2);
   cursor: pointer;
 }
-.wedding-card {
-  color: #1a202c;
-}
 
-.checklist-item span,
-.progress-text,
-.toggle-link,
-.checklist-actions a {
-  color: #1a202c;
-}
 
   </style>
 </head>
@@ -421,8 +455,12 @@ textarea {
 <div class="card card-medium wedding-card">
   <div class="card-title">Anjo + Kath Wedding Essentials Checklist</div>
 
-  <div class="checklist-header">
-    <div class="progress-text">
+  <!-- Progress bar -->
+  <div class="progress-wrapper">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label">
       <span id="progressCount">0</span>/<span id="totalCount">0</span> completed
     </div>
     <a href="#" class="toggle-link" onclick="toggleChecklist(event)">
@@ -431,13 +469,14 @@ textarea {
   </div>
 
   <div class="checklist-body" id="checklistBody">
-    <!-- Items injected from Google Sheets -->
+    <!-- Sections + items injected here -->
   </div>
 
   <div class="checklist-actions">
     <a href="#" onclick="downloadChecklistPDF(event)">Download as PDF</a>
   </div>
 </div>
+
 
 
   <!-- Additional small cards -->
@@ -615,29 +654,51 @@ function renderChecklist() {
   container.innerHTML = "";
 
   let completed = 0;
+  const sections = {};
 
   checklistData.forEach((row, index) => {
-    const done = row[2] === true;
+    const section = row[1];
+    const task = row[2];
+    const done = row[3] === true;
+
+    if (!sections[section]) sections[section] = [];
+    sections[section].push({ task, done, index });
+
     if (done) completed++;
-
-    const item = document.createElement("div");
-    item.className = "checklist-item" + (done ? " done" : "");
-
-    item.innerHTML = `
-      <input type="checkbox" ${done ? "checked" : ""}
-        onchange="toggleItem(${index}, this.checked)">
-      <span>${row[1]}</span>
-    `;
-
-    container.appendChild(item);
   });
 
+  Object.keys(sections).forEach(sectionName => {
+    const sectionDiv = document.createElement("div");
+    sectionDiv.className = "checklist-section";
+
+    sectionDiv.innerHTML = `
+      <div class="checklist-section-title">${sectionName}</div>
+    `;
+
+    sections[sectionName].forEach(item => {
+      const row = document.createElement("div");
+      row.className = "checklist-item" + (item.done ? " done" : "");
+      row.innerHTML = `
+        <input type="checkbox" ${item.done ? "checked" : ""}
+          onchange="toggleItem(${item.index}, this.checked)">
+        <span>${item.task}</span>
+      `;
+      sectionDiv.appendChild(row);
+    });
+
+    container.appendChild(sectionDiv);
+  });
+
+  const total = checklistData.length;
   document.getElementById("progressCount").textContent = completed;
-  document.getElementById("totalCount").textContent = checklistData.length;
+  document.getElementById("totalCount").textContent = total;
+
+  const percent = total ? (completed / total) * 100 : 0;
+  document.getElementById("progressFill").style.width = percent + "%";
 }
 
 function toggleItem(index, checked) {
-  checklistData[index][2] = checked;
+  checklistData[index][3] = checked;
 
   fetch(SHEET_ENDPOINT, {
     method: "POST",
@@ -653,7 +714,7 @@ function toggleItem(index, checked) {
 function toggleChecklist(e) {
   e.preventDefault();
   const body = document.getElementById("checklistBody");
-  body.style.display = body.style.display === "none" ? "flex" : "none";
+  body.style.display = body.style.display === "none" ? "block" : "none";
   e.target.textContent =
     body.style.display === "none" ? "Expand checklist" : "Collapse checklist";
 }
@@ -663,6 +724,7 @@ function downloadChecklistPDF(e) {
   window.print();
 }
 </script>
+
 
 </body>
 </html>
