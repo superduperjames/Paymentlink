@@ -437,7 +437,6 @@ textarea {
   border-radius: 14px;
   padding: 16px;
   color: #fff;
-  font-family: 'Montserrat', sans-serif;
 }
 
 /* Current celebrant */
@@ -486,22 +485,20 @@ textarea {
 
 /* Gallery wrapper */
 .celebrant-gallery-wrapper {
-  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  margin: 10px 0;
-  gap: 8px;
+  align-items: center;
+  width: 100%;
 }
 
 /* 2x2 Birthday gallery grid */
 .celebrant-gallery-grid {
-   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  max-width: 520px;   /* increase this */
-  width: 100%;
-  margin:0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 140px); /* 👈 fixed column width */
+  grid-template-rows: repeat(2, 140px);
+  gap: 12px;
+
+  margin: 0 auto;
 }
 
 /* Gallery images */
