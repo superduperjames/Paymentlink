@@ -277,7 +277,7 @@ textarea {
     /* FAQ button */
     .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #a8cdf0; color: #fff; cursor: pointer; margin-top: 10px; }
 
-/* Wedding Checklist Card */
+/* Wedding Checklist Card ------------------------------*/
 .wedding-card {
   font-family: 'Montserrat', sans-serif;
   color: #1a202c;
@@ -431,6 +431,78 @@ textarea {
   color: #1a202c;
 }
 
+/* Birthday Card Styling */
+.birthday-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #e9763d;
+  border-radius: 14px;
+  color: #fff;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Card title */
+.birthday-card .card-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Current celebrant */
+.celebrant-current .celebrant-name {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.celebrant-current .cake-icon {
+  display: inline-block;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.celebrant-current:hover .cake-icon {
+  transform: rotate(-15deg) scale(1.2);
+}
+
+.celebrant-current .celebrant-date {
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Next month */
+.celebrant-next {
+  font-size: 13px;
+  min-height: 18px; /* prevents layout shift when cycling names */
+}
+
+/* Greet button */
+.birthday-card .celebrant-action button {
+  margin-top: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background: #1a202c;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.birthday-card .celebrant-action button:hover {
+  transform: scale(1.05);
+  background: #2d3748;
+}
+
+
+    
   </style>
 </head>
 
@@ -534,25 +606,46 @@ textarea {
 
 
 
-  <!-- Additional small cards -->
-  <div class="card card-small">
-    <div class="card-title">New Image Box 1</div>
-    <img src="https://images.unsplash.com/photo-1593642532973-d31b6557fa68" style="width:100%; border-radius:10px;">
+  <!-- Additional small cards ------------------------>
+  
+<div class="card card-small birthday-card">
+  <div class="card-title">Birthday Celebrant</div>
+
+  <!-- Current Celebrant -->
+  <div class="celebrant-current">
+    <div class="celebrant-name" id="currentCelebrantName">
+      <span class="cake-icon">🎂</span>
+      <span id="celebrantNameText">[Name]</span>
+    </div>
+    <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
+
+  <!-- Next month (dynamic) -->
+  <div class="celebrant-next">
+    Up next: <span id="nextCelebrantName">[Next Name]</span>
+  </div>
+
+  <!-- Greet button -->
+  <div class="celebrant-action">
+    <button id="greetButton" onclick="greetLink()">Greet them here!</button>
+  </div>
+</div>
+
+
   <div class="card card-small">
     <div class="card-title">New Image Box 2</div>
     <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d" style="width:100%; border-radius:10px;">
   </div>
+  
   <div class="card card-small">
     <div class="card-title">New Image Box 3</div>
     <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" style="width:100%; border-radius:10px;">
   </div>
+  
 <div class="card card-small gallery-card">
   <div class="card-title">Gallery</div>
-
   <div class="gallery-wrapper">
     <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
-
     <div class="gallery-viewport">
       <div class="gallery-track" id="galleryTrack">
         <!-- Placeholders: replace src later, up to 10 images -->
@@ -566,10 +659,8 @@ textarea {
 <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162605/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c.jpg" onclick="openFullscreen(this.src)">
 <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162602/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8B15BD02-2893-47C7-A475-B3750D215A18_1_105_c.jpg" onclick="openFullscreen(this.src)">
 <img src="https://res.cloudinary.com/eventmobi/image/upload/v1768162599/_James%20Assets/.test%20app%20assets/Paymentlink%20Site/Gallery%20Images/8DD7B5ED-2516-487D-AE6E-243E796AA679_1_105_c.jpg" onclick="openFullscreen(this.src)">
-
       </div>
     </div>
-
     <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
   </div>
 </div>
@@ -774,6 +865,55 @@ function downloadChecklistPDF(e) {
 
 // Load checklist on page ready
 document.addEventListener("DOMContentLoaded", loadChecklist);
+</script>
+
+<script>
+// Birthday data - multiple celebrants per month
+const birthdayData = {
+  January: { name: "James", date: "Jan 12", next: ["Nikki"] },
+  February: { name: "Nikki", date: "Feb 20", next: ["AJ", "Anjo"] },
+  March: { name: "AJ", date: "Mar 5", next: ["Celine"] },
+  April: { name: "Anjo", date: "Apr 18", next: ["Sean"] },
+  May: { name: "Celine", date: "May 25", next: ["Kath"] },
+  June: { name: "Sean", date: "Jun 30", next: ["Allen"] },
+  July: { name: "Kath", date: "Jul 14", next: ["Mika"] },
+  August: { name: "Allen", date: "Aug 9", next: ["Leo"] },
+  September: { name: "Mika", date: "Sep 3", next: ["Tina"] },
+  October: { name: "Leo", date: "Oct 21", next: ["Mark"] },
+  November: { name: "Tina", date: "Nov 7", next: ["James", "Nikki"] },
+  December: { name: "Mark", date: "Dec 15", next: ["AJ"] }
+};
+
+const now = new Date();
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const currentMonth = monthNames[now.getMonth()];
+const nextMonth = monthNames[(now.getMonth() + 1) % 12];
+
+// Set current celebrant
+document.getElementById("celebrantNameText").textContent = birthdayData[currentMonth].name;
+document.getElementById("currentCelebrantDate").textContent = birthdayData[currentMonth].date;
+
+// Rotate through next month celebrants
+const nextCelebrants = birthdayData[nextMonth].next || [];
+let nextIndex = 0;
+const nextElem = document.getElementById("nextCelebrantName");
+
+if(nextCelebrants.length > 0){
+  nextElem.textContent = nextCelebrants[nextIndex];
+
+  setInterval(() => {
+    nextIndex = (nextIndex + 1) % nextCelebrants.length;
+    nextElem.textContent = nextCelebrants[nextIndex];
+  }, 3000); // change every 3 seconds
+} else {
+  nextElem.textContent = birthdayData[nextMonth].name || "";
+}
+
+// Greet button redirect
+function greetLink() {
+  const url = "https://example.com/greet"; // replace with your link
+  window.open(url, "_blank");
+}
 </script>
 
 
