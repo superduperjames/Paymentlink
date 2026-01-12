@@ -627,6 +627,91 @@ textarea {
   }
 }
 
+    /* =========================================
+   MOBILE PERFORMANCE + BREATHING SPACE
+   Desktop remains untouched
+========================================= */
+@media (max-width: 640px) {
+
+  /* Smooth, efficient scrolling */
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  /* Reduce heavy repaints on scroll */
+  .card,
+  .hero-image,
+  .highlights-grid img,
+  .celebrant-gallery-grid img {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  /* Disable hover transforms that cause jank on mobile */
+  .hero-image:hover,
+  .action-buttons button:hover,
+  .celebrant-gallery-grid img:hover {
+    transform: none;
+  }
+
+  /* Comfortable vertical rhythm */
+  .card-grid {
+    gap: 24px;
+    padding: 28px 16px;
+  }
+
+  /* Cards breathe */
+  .card,
+  .wedding-card {
+    padding: 20px 18px;
+    border-radius: 16px;
+  }
+
+  /* Titles need air */
+  .card-title {
+    margin-bottom: 16px;
+  }
+
+  /* Inner sections spacing */
+  .wellness-content,
+  .checklist-body,
+  .events-list {
+    gap: 14px;
+  }
+
+  /* Action buttons spacing */
+  .action-buttons {
+    gap: 14px;
+  }
+
+  .action-buttons button {
+    padding: 18px 12px;
+  }
+
+  /* Checklist scroll performance */
+  .wedding-card .checklist-body {
+    max-height: 60vh; /* avoids huge repaint zones */
+    overscroll-behavior: contain;
+  }
+
+  /* Gallery spacing */
+  .celebrant-gallery-wrapper {
+    margin: 12px 0;
+  }
+
+  /* Highlights grid spacing */
+  .highlights-grid {
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  /* Prevent layout shift from images loading */
+  img {
+    display: block;
+  }
+}
+
   </style>
 </head>
 
