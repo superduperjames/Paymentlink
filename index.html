@@ -790,6 +790,17 @@ textarea {
     opacity: 0;
   }
 }
+/* =========================================
+   RANDOMIZER SHUFFLE POLISH
+========================================= */
+.image-box-3 .randomizer-result {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.image-box-3 .randomizer-result.shuffling {
+  transform: scale(1.03);
+  opacity: 0.85;
+}
 
 
 
@@ -1438,7 +1449,7 @@ document.getElementById("eventsTitle").textContent =
   <script>
 /* ===============================
    PASSWORD-LOCKED RANDOMIZER
-   No repeats • Auto-lock • Confetti
+   No repeats • Auto-lock • Shuffle • Confetti
    Image Box 3 only
 ================================ */
 
@@ -1457,8 +1468,11 @@ const ALL_NAMES = [
 ];
 
 let remainingNames = [...ALL_NAMES];
+let isShuffling = false;
 
 function triggerRandomizer() {
+  if (isShuffling) return;
+
   const password = prompt("Enter password to continue:");
 
   if (password !== RANDOMIZER_PASSWORD) {
@@ -1471,13 +1485,31 @@ function triggerRandomizer() {
     return;
   }
 
-  const index = Math.floor(Math.random() * remainingNames.length);
-  const chosen = remainingNames.splice(index, 1)[0];
+  isShuffling = true;
 
   const resultEl = document.getElementById("randomizerResult");
-  resultEl.textContent = chosen;
+  resultEl.classList.add("shuffling");
 
-  fireConfetti();
+  /* 🎲 Shuffle animation */
+  const shuffleInterval = setInterval(() => {
+    const temp =
+      remainingNames[Math.floor(Math.random() * remainingNames.length)];
+    resultEl.textContent = temp;
+  }, 120);
+
+  /* Final pick after 2 seconds */
+  setTimeout(() => {
+    clearInterval(shuffleInterval);
+
+    const index = Math.floor(Math.random() * remainingNames.length);
+    const chosen = remainingNames.splice(index, 1)[0];
+
+    resultEl.textContent = chosen;
+    resultEl.classList.remove("shuffling");
+
+    fireConfetti();
+    isShuffling = false;
+  }, 2000);
 }
 
 /* 🎉 Tasteful confetti */
@@ -1500,6 +1532,7 @@ function fireConfetti() {
   }, 2000);
 }
 </script>
+
 
 
 </body>
