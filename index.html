@@ -801,6 +801,34 @@ textarea {
   transform: scale(1.03);
   opacity: 0.85;
 }
+/* =========================================
+   STACKED CARDS (DESKTOP + MOBILE SAFE)
+========================================= */
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Make the randomizer card more compact */
+.image-box-3 {
+  padding: 14px;
+}
+
+.image-box-3 .randomizer-result {
+  font-size: 18px;
+  min-height: 44px;
+}
+
+/* Secondary card matches scale */
+.image-box-3-secondary {
+  padding: 14px;
+}
+@media (max-width: 640px) {
+  .card-stack {
+    gap: 20px;
+  }
+}
 
 
 
@@ -958,7 +986,16 @@ textarea {
 </div>
 
   
-<div class="card card-small image-box-3">
+<div class="card-stack">
+  <div class="card card-small image-box-3">
+    <!-- Randomizer card -->
+  </div>
+
+  <div class="card card-small image-box-3-secondary">
+    <div class="card-title">Secondary Card</div>
+    <p>Add your content here</p>
+  </div>
+</div>
   <div class="card-title">Random Name Picker</div>
 
   <div class="randomizer-result" id="randomizerResult">
