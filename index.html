@@ -490,22 +490,18 @@ textarea {
   gap: 4px;
 }
 
-/* Gallery container */
+/* Updated 2x2 grid styling for Birthday Celebrants */
 .celebrant-gallery {
   display: flex;
-  overflow: hidden;
-  flex: 1;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 4%;
+  justify-content: space-between;
 }
-
-/* Gallery images */
 .celebrant-gallery img {
-  width: calc((100% - 18px) / 4); /* 4 images visible at a time */
   height: 100px;
   object-fit: cover;
   border-radius: 6px;
   cursor: pointer;
-  flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 .celebrant-gallery img:hover {
@@ -655,6 +651,7 @@ textarea {
 
   <!-- Additional small cards ------------------------>
   
+<!-- Updated Birthday Celebrant Card -->
 <div class="card card-small birthday-card">
   <div class="card-title">Birthday Celebrant</div>
 
@@ -667,16 +664,14 @@ textarea {
     <div class="celebrant-date" id="currentCelebrantDate">[Date]</div>
   </div>
 
-  <!-- Horizontal scrollable gallery with arrows -->
+  <!-- 2x2 Gallery Grid -->
   <div class="celebrant-gallery-wrapper">
-    <button class="gallery-arrow left" onclick="scrollGallery(-1)">‹</button>
     <div class="celebrant-gallery" id="celebrantGallery">
       <!-- Images dynamically loaded here -->
     </div>
-    <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
   </div>
 
-  <!-- Next Month -->
+  <!-- Next Celebrant -->
   <div class="celebrant-next">
     Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
@@ -930,8 +925,13 @@ function downloadChecklistPDF(e) {
 document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
 
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  const now = new Date();
+  const monthNames=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const currentMonth = monthNames[now.getMonth()];
   const birthdayData = {
     January: { 
       name: ["Sean"], 
@@ -1015,25 +1015,24 @@ document.addEventListener("DOMContentLoaded", function() {
   const data = birthdayData[currentMonth];
   if(!data) return;
 
-  // Current celebrant
   document.getElementById("celebrantNameText").textContent = data.name.join(", ");
   document.getElementById("currentCelebrantDate").textContent = data.date.join(", ");
-
-  // Next celebrant
   document.getElementById("nextCelebrantName").textContent = data.next.join(", ");
 
-  // Populate gallery
-  const galleryContainer = document.getElementById("celebrantGallery");
-  galleryContainer.innerHTML = "";
+  // Populate gallery in 2x2 grid
+  const gallery = document.getElementById("celebrantGallery");
+  gallery.innerHTML = "";
   data.gallery.forEach(src => {
     const img = document.createElement("img");
     img.src = src;
     img.alt = "Celebrant Image";
+    img.style.width = "48%";  // two per row
+    img.style.marginBottom = "4%";
     img.onclick = () => {
       document.getElementById("celebrantFullscreenImg").src = src;
       document.getElementById("celebrantFullscreen").style.display = "flex";
     };
-    galleryContainer.appendChild(img);
+    gallery.appendChild(img);
   });
 
   // Close fullscreen
@@ -1042,23 +1041,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("celebrantFullscreenImg").src = "";
   };
 });
-
-// Separate gallery scroll for celebrant gallery
-let celebrantGalleryIndex = 0;
-function scrollGallery(direction) {
-  const gallery = document.getElementById("celebrantGallery");
-  const visible = 4; // 4 images visible
-  const total = gallery.children.length;
-
-  celebrantGalleryIndex += direction;
-  celebrantGalleryIndex = Math.max(0, Math.min(celebrantGalleryIndex, total - visible));
-
-  const imageWidth = gallery.children[0].offsetWidth + 6; // gap = 6px
-  gallery.style.transform = `translateX(-${celebrantGalleryIndex * imageWidth}px)`;
-}
-
-// Greet button placeholder
-function greetLink() { alert("Greet functionality can be implemented here!"); }
 </script>
 
 
