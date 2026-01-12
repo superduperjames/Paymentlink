@@ -46,7 +46,7 @@ textarea {
     .card-title {
       font-size: 20px;
       font-weight: 700;
-      margin-bottom: 32px;
+      margin-bottom: 12px;
       text-align: center;
     }
 
@@ -446,7 +446,7 @@ textarea {
   margin-bottom: 10px;
 }
 .celebrant-name {
-  font-size: 48px;
+  font-size: 18px;
   font-weight: 700;
 }
 .celebrant-date {
@@ -459,7 +459,7 @@ textarea {
 /* Next celebrant */
 .celebrant-next {
   margin-top: 10px;
-  font-size: 12px;
+  font-size: 14px;
   text-align: center;
 }
 
@@ -475,7 +475,7 @@ textarea {
   border-radius: 8px;
   padding: 8px 12px;
   cursor: pointer;
-  font-size:15pt;
+  font-family: 'Montserrat', sans-serif;
 }
 .celebrant-action button:hover {
   background: #2d3748;
@@ -488,7 +488,6 @@ textarea {
   align-items: center;
   margin: 10px 0;
   gap: 4px;
-  margin-bottomL20%;
 }
 
 /* Gallery container */
@@ -677,14 +676,15 @@ textarea {
     <button class="gallery-arrow right" onclick="scrollGallery(1)">›</button>
   </div>
 
-<!-- Greet Button -->
-<div class="celebrant-action">
-  <button id="greetButton" onclick="greetLink()">Greet them here!</button>
-</div>
+  <!-- Next Month -->
+  <div class="celebrant-next">
+    Up next: <span id="nextCelebrantName">[Next Name]</span>
+  </div>
 
-<!-- Next Month -->
-<div class="celebrant-next">
-  Up next: <span id="nextCelebrantName">[Next Name]</span>
+  <!-- Greet Button -->
+  <div class="celebrant-action">
+    <button id="greetButton" onclick="greetLink()">Greet them here!</button>
+  </div>
 </div>
 
 <!-- Fullscreen overlay -->
@@ -692,6 +692,7 @@ textarea {
   <div class="fullscreen-close" id="celebrantFullscreenClose">×</div>
   <img id="celebrantFullscreenImg">
 </div>
+
 
 
   <div class="card card-small">
