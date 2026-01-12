@@ -11,8 +11,7 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: url('https://res.cloudinary.com/eventmobi/image/upload/v1752669733/_James%20Assets/.test%20app%20assets/Abstract%20Backgrounds/5897860.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background-color:black;
       color: #fff;
     }
 
@@ -225,7 +224,31 @@
 .gallery-track img:hover {
   transform: scale(1.05);
 }
-    
+    /* Card background colors by order */
+.card-grid .card:nth-child(1) {
+  background: #fef66a;
+}
+
+.card-grid .card:nth-child(2) {
+  background: #70bbff;
+}
+
+.card-grid .card:nth-child(3) {
+  background: #d8bbfc;
+}
+
+.card-grid .card:nth-child(4) {
+  background: #e9763d;
+}
+
+.card-grid .card:nth-child(5) {
+  background: #c2b598;
+}
+
+.card-grid .card:nth-child(6) {
+  background: #6af0cc;
+}
+
     /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.3s ease forwards; }
     .modal-content { background: white; padding: 20px; border-radius: 16px; max-width: 70%; text-align: center; transform: scale(0.92); opacity: 0; animation: popIn 0.35s ease forwards; }
