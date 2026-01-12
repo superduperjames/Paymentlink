@@ -712,6 +712,88 @@ textarea {
   }
 }
 
+    /* =========================================
+   IMAGE BOX 3 – RANDOMIZER (ISOLATED)
+========================================= */
+.image-box-3 {
+  text-align: center;
+}
+
+.image-box-3 .randomizer-result {
+  margin: 14px 0;
+  padding: 16px 12px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.1);
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a202c;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-box-3 .randomizer-btn {
+  width: 100%;
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #1a202c;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.image-box-3 .randomizer-btn:active {
+  transform: scale(0.98);
+}
+
+/* Mobile breathing room */
+@media (max-width: 640px) {
+  .image-box-3 {
+    padding: 20px;
+  }
+}
+/* =========================================
+   CONFETTI – SUBTLE & TASTEful
+========================================= */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 6px;
+  height: 10px;
+  border-radius: 2px;
+  background: hsl(
+    calc(200 + (var(--i, 0) * 20)),
+    70%,
+    60%
+  );
+  animation: confetti-fall 1.8s ease-out forwards;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(240deg);
+    opacity: 0;
+  }
+}
+
+
+
+    
   </style>
 </head>
 
@@ -865,10 +947,18 @@ textarea {
 </div>
 
   
-  <div class="card card-small">
-    <div class="card-title">New Image Box 3</div>
-    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4" style="width:100%; border-radius:10px;">
+<div class="card card-small image-box-3">
+  <div class="card-title">Random Name Picker</div>
+
+  <div class="randomizer-result" id="randomizerResult">
+    Tap to unlock & pick
   </div>
+
+  <button class="randomizer-btn" onclick="triggerRandomizer()">
+    Pick a Random Name
+  </button>
+</div>
+
   
 <div class="card card-small gallery-card">
   <div class="card-title">This month’s highlights</div>
@@ -1344,7 +1434,73 @@ document.getElementById("eventsTitle").textContent =
   });
 });
 </script>
-  
+
+  <script>
+/* ===============================
+   PASSWORD-LOCKED RANDOMIZER
+   No repeats • Auto-lock • Confetti
+   Image Box 3 only
+================================ */
+
+const RANDOMIZER_PASSWORD = "random123";
+
+/* 👇 Your 8 names */
+const ALL_NAMES = [
+  "James",
+  "Nikki",
+  "AJ",
+  "Anjo",
+  "Celine",
+  "Sean",
+  "Allen",
+  "Kath"
+];
+
+let remainingNames = [...ALL_NAMES];
+
+function triggerRandomizer() {
+  const password = prompt("Enter password to continue:");
+
+  if (password !== RANDOMIZER_PASSWORD) {
+    alert("Incorrect password.");
+    return;
+  }
+
+  if (remainingNames.length === 0) {
+    alert("All names have already been picked.");
+    return;
+  }
+
+  const index = Math.floor(Math.random() * remainingNames.length);
+  const chosen = remainingNames.splice(index, 1)[0];
+
+  const resultEl = document.getElementById("randomizerResult");
+  resultEl.textContent = chosen;
+
+  fireConfetti();
+}
+
+/* 🎉 Tasteful confetti */
+function fireConfetti() {
+  const container = document.createElement("div");
+  container.className = "confetti-container";
+
+  for (let i = 0; i < 18; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random() * 100 + "%";
+    piece.style.animationDelay = Math.random() * 0.4 + "s";
+    container.appendChild(piece);
+  }
+
+  document.body.appendChild(container);
+
+  setTimeout(() => {
+    container.remove();
+  }, 2000);
+}
+</script>
+
 
 </body>
 </html>
