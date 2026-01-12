@@ -446,13 +446,15 @@ textarea {
   margin-bottom: 10px;
 }
 .celebrant-name {
-  font-size: 18px;
+  font-size: 48px;
   font-weight: 700;
+  margin-top:5%;
 }
 .celebrant-date {
   font-size: 14px;
   margin-top: 2px;
   color: #fff;
+  margin-bottom:5%;
 }
 .cake-icon { margin-right: 6px; }
 
@@ -475,7 +477,8 @@ textarea {
   border-radius: 8px;
   padding: 8px 12px;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif;
+  font-size:15pt;
+  margin-top:5%;
 }
 .celebrant-action button:hover {
   background: #2d3748;
@@ -484,7 +487,7 @@ textarea {
 /* Gallery wrapper */
 .celebrant-gallery-wrapper {
   position: relative;
-  display: flex;
+  display: block;
   align-items: center;
   margin: 10px 0;
   gap: 4px;
@@ -674,14 +677,13 @@ textarea {
     <button class="gallery-arrow" id="nextGallery">&gt;</button>
   </div>
 
-  <!-- Next celebrant -->
-  <div class="celebrant-next">
-    Up next: <span id="nextCelebrantName">[Next Name]</span>
-  </div>
-
   <!-- Greet Button -->
   <div class="celebrant-action">
     <button id="greetButton">Greet them here!</button>
+  </div>
+    <!-- Next celebrant -->
+  <div class="celebrant-next">
+    Up next: <span id="nextCelebrantName">[Next Name]</span>
   </div>
 </div>
 
