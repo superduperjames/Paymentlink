@@ -468,12 +468,20 @@ textarea {
 }
     
 /* Gallery card styling ---------------------------------------------*/
+/* Shrink Gallery Card */
 .gallery-card {
-  background: #ABE188; /* change this to any color you like */
+  background: #ABE188; 
   border-radius: 14px;
   padding: 16px;
-  color: #fff; /* text color */
+  color: #fff; 
   font-family: 'Montserrat', sans-serif;
+
+  height: 50%;          /* Half the height */
+  min-height: 200px;    /* ensures it doesn't collapse too much */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centers content vertically */
+  overflow: hidden;     /* prevents overflowing content */
 }
 
 /* Fullscreen */
@@ -500,6 +508,7 @@ textarea {
   cursor: pointer;
   font-weight: 600;
 }
+  
 
 
     /* Highlights gallery --------------------------------*/
@@ -512,11 +521,10 @@ textarea {
 }
 .highlights-grid img {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  height: auto;
+  max-height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+  border-radius: 12px;
 }
 .highlights-grid img:hover {
   transform: scale(1.04);
