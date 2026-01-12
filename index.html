@@ -279,27 +279,37 @@ textarea {
     /* FAQ button */
     .faq-btn { padding: 10px 16px; font-size: 14px; border-radius: 8px; border: none; background: #a8cdf0; color: #fff; cursor: pointer; margin-top: 10px; }
 
-/* Wedding checklist */
+/* Wedding Checklist Card */
 .wedding-card {
   color: #1a202c;
+  font-family: 'Montserrat', sans-serif;
 }
 
-/* Progress bar */
+/* Card title */
+.wedding-card .card-title {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Progress bar wrapper */
 .progress-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 6px;
+  margin-bottom: 12px;
+  align-items: center;
 }
 
+/* Progress bar background */
 .progress-bar-bg {
-  width: 100%;
-  height: 8px;
+  width: 90%;
+  height: 10px;
   background: rgba(0,0,0,0.15);
   border-radius: 999px;
   overflow: hidden;
 }
 
+/* Progress bar fill */
 .progress-bar-fill {
   height: 100%;
   width: 0%;
@@ -308,36 +318,36 @@ textarea {
   transition: width 0.4s ease;
 }
 
+/* Progress label */
 .progress-label {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
-.toggle-link,
-.checklist-actions a {
+/* Toggle checklist link */
+.toggle-link {
   font-size: 13px;
   color: #1a202c;
   text-decoration: underline;
   cursor: pointer;
 }
 
-/* Sections */
-.checklist-section {
-  margin-bottom: 14px;
+/* Checklist body */
+.checklist-body {
+  display: block;
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.checklist-section-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-/* Items */
+/* Individual checklist item */
 .checklist-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 8px 12px;
   border-radius: 8px;
   background: rgba(255,255,255,0.75);
   transition: background 0.25s ease;
@@ -345,9 +355,11 @@ textarea {
 
 .checklist-item span {
   position: relative;
+  flex: 1;
+  font-size: 14px;
 }
 
-/* Animated strike-through */
+/* Animated strike-through for checked items */
 .checklist-item.done span::after {
   content: "";
   position: absolute;
@@ -365,14 +377,30 @@ textarea {
   to { transform: scaleX(1); }
 }
 
+/* Checked items slightly faded */
 .checklist-item.done {
   opacity: 0.6;
 }
 
-.checklist-item input {
+/* Checkbox styling */
+.checklist-item input[type="checkbox"] {
   transform: scale(1.2);
   cursor: pointer;
 }
+
+/* Download link */
+.checklist-actions {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.checklist-actions a {
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #1a202c;
+}
+
 
 
   </style>
@@ -639,91 +667,86 @@ textarea {
 </script>
 
   <script>
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbz3u3OgbkWEcqOKIeXz-dXvi-RlEKOkB8wkRHgZKVQdSHZsvjsN9cQsEvNNiJ_xWGEwlg/exec";
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbz3u3OgbkWEcqOKIeXz-dXvi-RlEKOkB8wkRHgZKVQdSHZsvjsN9cQsEvNNiJ_xWGEwlg/exec"; // Replace with your web app URL
 let checklistData = [];
 
-fetch(SHEET_ENDPOINT)
-  .then(res => res.json())
-  .then(data => {
-    checklistData = data;
+// Fetch data from Google Sheets
+async function loadChecklist() {
+  try {
+    const res = await fetch(SHEET_ENDPOINT);
+    checklistData = await res.json();
     renderChecklist();
-  });
+  } catch(err) {
+    console.error("Error fetching checklist:", err);
+  }
+}
 
+// Render checklist UI
 function renderChecklist() {
   const container = document.getElementById("checklistBody");
   container.innerHTML = "";
 
-  let completed = 0;
-  const sections = {};
+  let completedCount = 0;
+  const totalCount = checklistData.length;
 
   checklistData.forEach((row, index) => {
-    const section = row[1];
-    const task = row[2];
-    const done = row[3] === true;
+    const label = row[0];
+    const done = row[1] === true || row[1] === "TRUE";
 
-    if (!sections[section]) sections[section] = [];
-    sections[section].push({ task, done, index });
+    if(done) completedCount++;
 
-    if (done) completed++;
-  });
-
-  Object.keys(sections).forEach(sectionName => {
-    const sectionDiv = document.createElement("div");
-    sectionDiv.className = "checklist-section";
-
-    sectionDiv.innerHTML = `
-      <div class="checklist-section-title">${sectionName}</div>
+    const itemDiv = document.createElement("div");
+    itemDiv.className = "checklist-item" + (done ? " done" : "");
+    itemDiv.innerHTML = `
+      <input type="checkbox" ${done ? "checked" : ""}
+        onchange="toggleItem(${index}, this.checked)">
+      <span>${label}</span>
     `;
-
-    sections[sectionName].forEach(item => {
-      const row = document.createElement("div");
-      row.className = "checklist-item" + (item.done ? " done" : "");
-      row.innerHTML = `
-        <input type="checkbox" ${item.done ? "checked" : ""}
-          onchange="toggleItem(${item.index}, this.checked)">
-        <span>${item.task}</span>
-      `;
-      sectionDiv.appendChild(row);
-    });
-
-    container.appendChild(sectionDiv);
+    container.appendChild(itemDiv);
   });
 
-  const total = checklistData.length;
-  document.getElementById("progressCount").textContent = completed;
-  document.getElementById("totalCount").textContent = total;
-
-  const percent = total ? (completed / total) * 100 : 0;
+  // Update progress bar
+  const percent = totalCount ? (completedCount / totalCount) * 100 : 0;
   document.getElementById("progressFill").style.width = percent + "%";
+  document.getElementById("progressCount").textContent = completedCount;
+  document.getElementById("totalCount").textContent = totalCount;
 }
 
+// Toggle checkbox, update Google Sheet
 function toggleItem(index, checked) {
-  checklistData[index][3] = checked;
+  checklistData[index][1] = checked;
 
+  // Post update to Google Sheet
   fetch(SHEET_ENDPOINT, {
     method: "POST",
     body: JSON.stringify({
-      row: index + 2,
+      row: index + 2, // +2 if your sheet has a header row
       completed: checked
     })
-  });
+  }).catch(err => console.error(err));
 
   renderChecklist();
 }
 
+// Collapse / expand checklist
 function toggleChecklist(e) {
   e.preventDefault();
   const body = document.getElementById("checklistBody");
-  body.style.display = body.style.display === "none" ? "block" : "none";
+  body.style.display = body.style.display === "none" ? "flex" : "none";
   e.target.textContent =
     body.style.display === "none" ? "Expand checklist" : "Collapse checklist";
 }
 
+// Download checklist as PDF (prints the current card)
 function downloadChecklistPDF(e) {
   e.preventDefault();
   window.print();
 }
+
+// Load on page ready
+document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
+
 
 
 </body>
