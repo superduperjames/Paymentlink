@@ -575,58 +575,6 @@ textarea {
 
 
 
-    /* ===============================
-   MOBILE STACKING FIX (SAFE)
-   Desktop untouched
-================================= */
-@media (max-width: 640px) {
-
-  /* Stack everything vertically */
-  .card-grid {
-    flex-direction: column;
-    padding: 20px 12px;
-  }
-
-  /* All cards take full width */
-  .card,
-  .card-large,
-  .card-medium,
-  .card-small,
-  .wedding-card {
-    width: 100%;
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
-
-  /* Prevent odd side squeezing */
-  .card {
-    margin: 0;
-  }
-
-  /* Normalize inner layouts that assume horizontal space */
-  .package-row,
-  .wellness-bottom-row {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .or-info {
-    text-align: center;
-  }
-
-  /* Birthday gallery stays centered */
-  .celebrant-gallery-wrapper {
-    gap: 8px;
-  }
-
-  /* Prevent image overflow */
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
     /* =========================================
    MOBILE PERFORMANCE + BREATHING SPACE
    Desktop remains untouched
