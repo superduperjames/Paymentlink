@@ -534,61 +534,49 @@ textarea {
   background: #2d3748; 
 }
     
-/* Gallery card styling ---------------------------------------------*/
+/* =========================================
+   Gallery Card Styling - Responsive
+========================================= */
 .gallery-card {
-  background: #ABE188;
+  background: #ABE188;      /* Card color */
   border-radius: 14px;
   padding: 12px;
   color: #fff;
-  position: relative;
-  font-size:14pt;
-  max-width:280px;
-  margin:0 auto;
+  max-width: 480px;         /* Max width of card */
+  margin: 0 auto;           /* Center card */
 }
 
-/* Gallery container + arrows */
-.highlights-container {
-  position: relative;
+/* Card title */
+.gallery-card .card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
 }
-.gallery-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  border: none;
-  font-size: 20px;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  cursor: pointer;
-  z-index: 10;
-}
-.gallery-arrow.left { left: -10px; }
-.gallery-arrow.right { right: -10px; }
 
-/* Highlights grid - 3x3 */
+/* Highlights grid */
 .highlights-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 6px;
-  margin-top: 10px;
+  gap: 8px;                             /* Gaps between images */
+  margin-top: 12px;
+  grid-auto-rows: 1fr;                  /* Keep images square */
 }
+
+/* Images */
 .highlights-grid img {
-  width: 90%;
+  width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  margin: 0 auto;
 }
+
 .highlights-grid img:hover {
   transform: scale(1.04);
 }
 
-/* Fullscreen */
+/* Fullscreen modal */
 .fullscreen {
   display: none;
   position: fixed;
@@ -598,11 +586,13 @@ textarea {
   align-items: center;
   justify-content: center;
 }
+
 .fullscreen img {
   max-width: 95%;
   max-height: 95%;
   border-radius: 12px;
 }
+
 .fullscreen-close {
   position: absolute;
   top: 20px;
@@ -613,19 +603,72 @@ textarea {
   font-weight: 600;
 }
 
-/* Mobile tweaks */
+/* Paging arrows */
+.gallery-arrow {
+  cursor: pointer;
+  background: rgba(0,0,0,0.15);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  margin: 6px;
+  transition: background 0.2s;
+}
+
+.gallery-arrow:hover {
+  background: rgba(0,0,0,0.3);
+}
+
+/* ==========================
+   Responsive tweaks
+========================== */
+
+/* Mobile: 3x3 grid */
 @media (max-width: 480px) {
-  .highlights-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
-    gap: 5px;
+  .gallery-card {
+    max-width: 95%;
+    padding: 10px;
   }
+
+  .highlights-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile */
+    grid-auto-rows: 1fr;
+    gap: 6px;
+  }
+
   .gallery-arrow {
     width: 28px;
     height: 28px;
     font-size: 20px;
   }
 }
+
+/* Desktop: 2 rows × 4 columns */
+@media (min-width: 768px) {
+  .highlights-grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+    gap: 8px;
+    height: calc((100% / 2) * 2);          /* Ensures grid accommodates 2 rows */
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery-card {
+    max-width: 480px;
+    padding: 14px;
+  }
+
+  .highlights-grid {
+    gap: 8px;
+  }
+}
+
 
 
 
@@ -1067,17 +1110,16 @@ textarea {
 
   
 <div class="card card-small gallery-card">
-  <div class="card-title">This Month’s Highlights</div>
+  <div class="card-title">This month’s highlights</div>
 
-  <div class="highlights-container">
-    <!-- Gallery pages -->
-    <div class="highlights-grid" id="galleryPage">
-      <!-- Images will be populated by JS -->
-    </div>
+  <div class="highlights-grid" id="highlightsGrid">
+    <!-- Images will be injected by JS per page -->
+  </div>
 
-    <!-- Pagination arrows -->
-    <button class="gallery-arrow left" onclick="changePage(-1)">‹</button>
-    <button class="gallery-arrow right" onclick="changePage(1)">›</button>
+  <!-- Paging arrows -->
+  <div style="text-align:center; margin-top:12px;">
+    <span class="gallery-arrow" onclick="prevPage()">&#8592;</span>
+    <span class="gallery-arrow" onclick="nextPage()">&#8594;</span>
   </div>
 </div>
 
@@ -1086,6 +1128,8 @@ textarea {
   <span class="fullscreen-close" onclick="closeFullscreen()">×</span>
   <img id="fullscreenImg" src="" alt="">
 </div>
+
+  
 
 
 <!-- Modals remain the same -->
@@ -1543,8 +1587,9 @@ document.getElementById("eventsTitle").textContent =
 </script>
 
 <script>
-  // Array of pages; each page is an array of image URLs
-const galleryPages = [
+// ===== Image Data =====
+const allPages = [
+  // Page 1
   [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230431/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c_r3ermx.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c_oqzloy.jpg",
@@ -1553,53 +1598,66 @@ const galleryPages = [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230436/AC68A0D2-1E61-4A6D-9603-AD0436D16482_1_201_a_g1y2df.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230438/C9593A0E-2031-4957-ADDB-33E880BBD5BF_1_105_c_ixswhj.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230486/EF67647C-BDFE-4E6A-AF0A-B09F81EFDD6C_1_201_a_udequu.jpg",
-    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg",
-    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg"
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg"
   ],
+  // Page 2
   [
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233940/20260111_201743_250_g185tj.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233933/20260111_202625_680_pvvz5r.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233955/20260111_212555_528_lf9zq0.jpg"
-    // Add more pages as needed
+    // Add more pages/images as needed
   ]
 ];
 
 let currentPage = 0;
+const highlightsGrid = document.getElementById("highlightsGrid");
 
-const galleryGrid = document.getElementById("galleryPage");
-
-// Render current page
+// ===== Render current page =====
 function renderPage() {
-  galleryGrid.innerHTML = ""; // clear previous
-  galleryPages[currentPage].forEach(src => {
+  highlightsGrid.innerHTML = "";
+  const pageImages = allPages[currentPage];
+  pageImages.forEach(src => {
     const img = document.createElement("img");
     img.src = src;
+    img.alt = "Highlight";
     img.onclick = () => openFullscreen(src);
-    galleryGrid.appendChild(img);
+    highlightsGrid.appendChild(img);
   });
 }
 
-// Change page
-function changePage(dir) {
-  const newPage = currentPage + dir;
-  if (newPage < 0 || newPage >= galleryPages.length) return;
-  currentPage = newPage;
-  renderPage();
+// ===== Paging =====
+function nextPage() {
+  if (currentPage < allPages.length - 1) {
+    currentPage++;
+    renderPage();
+  }
 }
 
-// Fullscreen
+function prevPage() {
+  if (currentPage > 0) {
+    currentPage--;
+    renderPage();
+  }
+}
+
+// ===== Fullscreen =====
+const fullscreenModal = document.getElementById("fullscreenModal");
+const fullscreenImg = document.getElementById("fullscreenImg");
+
 function openFullscreen(src) {
-  const modal = document.getElementById("fullscreenModal");
-  const modalImg = document.getElementById("fullscreenImg");
-  modal.style.display = "flex";
-  modalImg.src = src;
-}
-function closeFullscreen() {
-  document.getElementById("fullscreenModal").style.display = "none";
+  fullscreenImg.src = src;
+  fullscreenModal.style.display = "flex";
 }
 
-// Initialize
-document.addEventListener("DOMContentLoaded", renderPage);
+function closeFullscreen() {
+  fullscreenModal.style.display = "none";
+  fullscreenImg.src = "";
+}
+
+// ===== Initial render =====
+renderPage();
+
 </script>
     
 <script>
