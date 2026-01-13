@@ -536,11 +536,53 @@ textarea {
     
 /* Gallery card styling ---------------------------------------------*/
 .gallery-card {
-  background: #ABE188; /* change this to any color you like */
+  background: #ABE188;
   border-radius: 14px;
   padding: 16px;
-  color: #fff; /* text color */
+  color: #fff;
   font-family: 'Montserrat', sans-serif;
+  position: relative;
+}
+
+/* Gallery container + arrows */
+.highlights-container {
+  position: relative;
+}
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  z-index: 10;
+}
+.gallery-arrow.left { left: -10px; }
+.gallery-arrow.right { right: -10px; }
+
+/* Highlights grid - 3x3 */
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.highlights-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.highlights-grid img:hover {
+  transform: scale(1.04);
 }
 
 /* Fullscreen */
@@ -568,26 +610,19 @@ textarea {
   font-weight: 600;
 }
 
+/* Mobile tweaks */
+@media (max-width: 480px) {
+  .highlights-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+  .gallery-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+  }
+}
 
-    /* Highlights gallery --------------------------------*/
-.highlights-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
-  gap: 8px;
-  margin-top: 12px;
-}
-.highlights-grid img {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.highlights-grid img:hover {
-  transform: scale(1.04);
-}
 
 
     /* Events Card ------------------------------------------------*/
@@ -1028,28 +1063,26 @@ textarea {
 
   
 <div class="card card-small gallery-card">
-  <div class="card-title">This month’s highlights</div>
+  <div class="card-title">This Month’s Highlights</div>
 
-  <div class="highlights-grid">
-    <!-- Replace / add images as needed (up to 16) -->
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230431/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c_r3ermx.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c_oqzloy.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230432/A2C35CFE-CBEE-42A8-817B-EA5491DC8D2E_1_105_c_kvqwk7.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/54EB913E-ABED-4BF1-BB31-948F9BF70844_1_201_a_b5q00o.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230436/AC68A0D2-1E61-4A6D-9603-AD0436D16482_1_201_a_g1y2df.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230438/C9593A0E-2031-4957-ADDB-33E880BBD5BF_1_105_c_ixswhj.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768230486/EF67647C-BDFE-4E6A-AF0A-B09F81EFDD6C_1_201_a_udequu.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768233940/20260111_201743_250_g185tj.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768233933/20260111_202625_680_pvvz5r.jpg" onclick="openFullscreen(this.src)">
-    <img src="https://res.cloudinary.com/dzjdhooce/image/upload/v1768233955/20260111_212555_528_lf9zq0.jpg" onclick="openFullscreen(this.src)">
-    <!-- Repeat until 16 images total -->
+  <div class="highlights-container">
+    <!-- Gallery pages -->
+    <div class="highlights-grid" id="galleryPage">
+      <!-- Images will be populated by JS -->
+    </div>
+
+    <!-- Pagination arrows -->
+    <button class="gallery-arrow left" onclick="changePage(-1)">‹</button>
+    <button class="gallery-arrow right" onclick="changePage(1)">›</button>
   </div>
 </div>
 
-
+<!-- Fullscreen modal -->
+<div class="fullscreen" id="fullscreenModal">
+  <span class="fullscreen-close" onclick="closeFullscreen()">×</span>
+  <img id="fullscreenImg" src="" alt="">
 </div>
+
 
 <!-- Modals remain the same -->
 <div class="modal" id="modal" onclick="closeModal()">
@@ -1072,6 +1105,9 @@ textarea {
   <img id="fullscreenImg">
 </div>
 
+
+
+  
 <script>
   const nameData = {
     james: { option1:0, option2:0, option3:0, option4:0, option5:0 },
@@ -1502,6 +1538,66 @@ document.getElementById("eventsTitle").textContent =
 });
 </script>
 
+<script>
+  // Array of pages; each page is an array of image URLs
+const galleryPages = [
+  [
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230431/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c_r3ermx.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c_oqzloy.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230432/A2C35CFE-CBEE-42A8-817B-EA5491DC8D2E_1_105_c_kvqwk7.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/54EB913E-ABED-4BF1-BB31-948F9BF70844_1_201_a_b5q00o.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230436/AC68A0D2-1E61-4A6D-9603-AD0436D16482_1_201_a_g1y2df.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230438/C9593A0E-2031-4957-ADDB-33E880BBD5BF_1_105_c_ixswhj.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230486/EF67647C-BDFE-4E6A-AF0A-B09F81EFDD6C_1_201_a_udequu.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg"
+  ],
+  [
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233940/20260111_201743_250_g185tj.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233933/20260111_202625_680_pvvz5r.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233955/20260111_212555_528_lf9zq0.jpg"
+    // Add more pages as needed
+  ]
+];
+
+let currentPage = 0;
+
+const galleryGrid = document.getElementById("galleryPage");
+
+// Render current page
+function renderPage() {
+  galleryGrid.innerHTML = ""; // clear previous
+  galleryPages[currentPage].forEach(src => {
+    const img = document.createElement("img");
+    img.src = src;
+    img.onclick = () => openFullscreen(src);
+    galleryGrid.appendChild(img);
+  });
+}
+
+// Change page
+function changePage(dir) {
+  const newPage = currentPage + dir;
+  if (newPage < 0 || newPage >= galleryPages.length) return;
+  currentPage = newPage;
+  renderPage();
+}
+
+// Fullscreen
+function openFullscreen(src) {
+  const modal = document.getElementById("fullscreenModal");
+  const modalImg = document.getElementById("fullscreenImg");
+  modal.style.display = "flex";
+  modalImg.src = src;
+}
+function closeFullscreen() {
+  document.getElementById("fullscreenModal").style.display = "none";
+}
+
+// Initialize
+document.addEventListener("DOMContentLoaded", renderPage);
+</script>
+    
 <script>
 /* ===============================
    PASSWORD-LOCKED RANDOMIZER
