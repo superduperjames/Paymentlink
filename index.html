@@ -712,30 +712,70 @@ textarea {
   }
 }
 
-    /* =========================================
-   IMAGE BOX 3 – RANDOMIZER (ISOLATED)
+
+    
+/* =========================================
+   RANDOMIZER CARD
 ========================================= */
 .image-box-3 {
   text-align: center;
 }
 
+/* Name display */
 .image-box-3 .randomizer-result {
   margin: 14px 0;
-  padding: 16px 12px;
+  padding: 14px;
   border-radius: 12px;
-  background: rgba(0,0,0,0.1);
-  font-size: 50px;
+  background: rgba(0,0,0,0.08);
+  font-size: 20px;
   font-weight: 700;
-  color: #1a202c;
-  min-height: 56px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
+.image-box-3 .randomizer-result.shuffling {
+  transform: scale(1.04);
+  opacity: 0.85;
+}
+
+/* =========================================
+   RANDOMIZER PHOTO
+========================================= */
+.image-box-3 .randomizer-photo {
+  width: 120px;
+  height: 120px;
+  margin: 12px auto 0;
+  border-radius: 50%;
+  object-fit: cover;
+  display: none;
+
+  filter: grayscale(100%);
+  opacity: 0;
+  transform: scale(0.92);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    filter 0.4s ease;
+}
+
+.image-box-3 .randomizer-photo.revealed {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+  filter: grayscale(0%);
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
 .image-box-3 .randomizer-btn {
   width: 100%;
-  padding: 14px 12px;
+  margin-top: 14px;
+  padding: 14px;
   border-radius: 10px;
   border: none;
   background: #1a202c;
@@ -749,21 +789,30 @@ textarea {
   transform: scale(0.98);
 }
 
-/* Mobile breathing room */
-@media (max-width: 640px) {
-  .image-box-3 {
-    padding: 20px;
-  }
+.image-box-3 .randomizer-reset-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.2);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
 }
+
+.image-box-3 .randomizer-reset-btn:active {
+  transform: scale(0.97);
+}
+
 /* =========================================
-   CONFETTI – SUBTLE & TASTEful
+   CONFETTI
 ========================================= */
 .confetti-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  overflow: hidden;
 }
 
 .confetti-piece {
@@ -772,35 +821,17 @@ textarea {
   width: 6px;
   height: 10px;
   border-radius: 2px;
-  background: hsl(
-    calc(200 + (var(--i, 0) * 20)),
-    70%,
-    60%
-  );
+  background: hsl(210, 70%, 60%);
   animation: confetti-fall 1.8s ease-out forwards;
 }
 
 @keyframes confetti-fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
+  to {
     transform: translateY(110vh) rotate(240deg);
     opacity: 0;
   }
 }
-/* =========================================
-   RANDOMIZER SHUFFLE POLISH
-========================================= */
-.image-box-3 .randomizer-result {
-  transition: transform 0.15s ease, opacity 0.15s ease;
-}
 
-.image-box-3 .randomizer-result.shuffling {
-  transform: scale(1.03);
-  opacity: 0.85;
-}
 
 
 
@@ -958,17 +989,41 @@ textarea {
 </div>
 
   
+  
 <div class="card card-small image-box-3">
   <div class="card-title">Random Name Picker</div>
 
-  <div class="randomizer-result" id="randomizerResult">
+  <div id="randomizerResult" class="randomizer-result">
     Tap to unlock & pick
   </div>
+
+  <img
+    id="randomizerPhoto"
+    class="randomizer-photo"
+    src=""
+    alt=""
+  />
 
   <button class="randomizer-btn" onclick="triggerRandomizer()">
     Pick a Random Name
   </button>
+
+  <button class="randomizer-reset-btn" onclick="resetRandomizer()">
+    Reset Selection
+  </button>
 </div>
+<div class="randomizer-card">
+  <div class="avatar-wrapper">
+    <img id="randomizerAvatar" class="avatar grayscale" />
+  </div>
+
+  <div id="randomizerResult" class="randomizer-name">—</div>
+
+  <button onclick="triggerRandomizer()">Pick Random Name</button>
+  <button class="reset-btn" onclick="resetRandomizer()">Reset Selection</button>
+</div>
+
+  
 
   
 <div class="card card-small gallery-card">
@@ -1446,41 +1501,55 @@ document.getElementById("eventsTitle").textContent =
 });
 </script>
 
-  <script>
+ <script>
 /* ===============================
    PASSWORD-LOCKED RANDOMIZER
-   No repeats • Auto-lock • Shuffle • Confetti
-   Image Box 3 only
+   Name + Photo • No repeats
+   Shuffle • Fade • Reset
 ================================ */
+const STORAGE_KEY = "randomizer_state";
 
+function saveState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  return raw ? JSON.parse(raw) : null;
+}
+
+function clearState() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+   
 const RANDOMIZER_PASSWORD = "random123";
 
-/* 👇 Your 8 names */
-const ALL_NAMES = [
-  "James",
-  "Nikki",
-  "AJ",
-  "Anjo",
-  "Celine",
-  "Sean",
-  "Allen",
-  "Kath"
+/* 👇 Names + photos */
+const ALL_PEOPLE = [
+  { name: "James", photo: "images/james.jpg" },
+  { name: "Nikki", photo: "images/nikki.jpg" },
+  { name: "AJ", photo: "images/aj.jpg" },
+  { name: "Anjo", photo: "images/anjo.jpg" },
+  { name: "Celine", photo: "images/celine.jpg" },
+  { name: "Sean", photo: "images/sean.jpg" },
+  { name: "Allen", photo: "images/allen.jpg" },
+  { name: "Kath", photo: "images/kath.jpg" }
 ];
 
-let remainingNames = [...ALL_NAMES];
+
+let remainingEntries = [...ALL_ENTRIES];
 let isShuffling = false;
 
 function triggerRandomizer() {
   if (isShuffling) return;
 
   const password = prompt("Enter password to continue:");
-
   if (password !== RANDOMIZER_PASSWORD) {
     alert("Incorrect password.");
     return;
   }
 
-  if (remainingNames.length === 0) {
+  if (remainingEntries.length === 0) {
     alert("All names have already been picked.");
     return;
   }
@@ -1488,31 +1557,60 @@ function triggerRandomizer() {
   isShuffling = true;
 
   const resultEl = document.getElementById("randomizerResult");
-  resultEl.classList.add("shuffling");
+  const photoEl = document.getElementById("randomizerPhoto");
 
-  /* 🎲 Shuffle animation */
+  resultEl.classList.add("shuffling");
+  photoEl.classList.remove("revealed");
+  photoEl.style.display = "none";
+
+  /* Shuffle animation */
   const shuffleInterval = setInterval(() => {
     const temp =
-      remainingNames[Math.floor(Math.random() * remainingNames.length)];
-    resultEl.textContent = temp;
+      remainingEntries[Math.floor(Math.random() * remainingEntries.length)];
+    resultEl.textContent = temp.name;
   }, 120);
 
-  /* Final pick after 2 seconds */
   setTimeout(() => {
     clearInterval(shuffleInterval);
 
-    const index = Math.floor(Math.random() * remainingNames.length);
-    const chosen = remainingNames.splice(index, 1)[0];
+    const index = Math.floor(Math.random() * remainingEntries.length);
+    const chosen = remainingEntries.splice(index, 1)[0];
 
-    resultEl.textContent = chosen;
+    resultEl.textContent = chosen.name;
     resultEl.classList.remove("shuffling");
+
+    photoEl.src = chosen.photo;
+    photoEl.alt = chosen.name;
+    photoEl.style.display = "block";
+
+    requestAnimationFrame(() => {
+      photoEl.classList.add("revealed");
+    });
 
     fireConfetti();
     isShuffling = false;
   }, 2000);
 }
 
-/* 🎉 Tasteful confetti */
+/* Reset everything */
+function resetRandomizer() {
+  const password = prompt("Enter password to reset:");
+  if (password !== RANDOMIZER_PASSWORD) {
+    alert("Incorrect password.");
+    return;
+  }
+
+  remainingEntries = [...ALL_ENTRIES];
+
+  const resultEl = document.getElementById("randomizerResult");
+  const photoEl = document.getElementById("randomizerPhoto");
+
+  resultEl.textContent = "Tap to unlock & pick";
+  photoEl.classList.remove("revealed");
+  photoEl.style.display = "none";
+}
+
+/* Confetti */
 function fireConfetti() {
   const container = document.createElement("div");
   container.className = "confetti-container";
@@ -1527,10 +1625,108 @@ function fireConfetti() {
 
   document.body.appendChild(container);
 
+  setTimeout(() => container.remove(), 2000);
+}
+   let remainingPeople = [...ALL_PEOPLE];
+let lastPicked = null;
+let isLocked = false;
+let isShuffling = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+  const saved = loadState();
+  if (!saved) return;
+
+  remainingPeople = saved.remainingPeople;
+  lastPicked = saved.lastPicked;
+  isLocked = saved.isLocked;
+
+  if (lastPicked) {
+    showResult(lastPicked, false); // no confetti on restore
+  }
+});
+function triggerRandomizer() {
+  if (isShuffling || isLocked) return;
+
+  const password = prompt("Enter password to continue:");
+  if (password !== RANDOMIZER_PASSWORD) {
+    alert("Incorrect password.");
+    return;
+  }
+
+  if (remainingPeople.length === 0) {
+    alert("All names have already been picked.");
+    return;
+  }
+
+  isShuffling = true;
+
+  const nameEl = document.getElementById("randomizerResult");
+  const avatarEl = document.getElementById("randomizerAvatar");
+
+  nameEl.classList.add("shuffling");
+
+  const shuffleInterval = setInterval(() => {
+    const temp =
+      remainingPeople[Math.floor(Math.random() * remainingPeople.length)];
+    nameEl.textContent = temp.name;
+    avatarEl.src = temp.photo;
+  }, 120);
+
   setTimeout(() => {
-    container.remove();
+    clearInterval(shuffleInterval);
+    nameEl.classList.remove("shuffling");
+
+    const index = Math.floor(Math.random() * remainingPeople.length);
+    const chosen = remainingPeople.splice(index, 1)[0];
+
+    lastPicked = chosen;
+    isLocked = true;
+
+    showResult(chosen, true);
+
+    saveState({
+      remainingPeople,
+      lastPicked,
+      isLocked
+    });
+
+    isShuffling = false;
   }, 2000);
 }
+function showResult(person, celebrate = true) {
+  const nameEl = document.getElementById("randomizerResult");
+  const avatarEl = document.getElementById("randomizerAvatar");
+
+  nameEl.textContent = person.name;
+
+  avatarEl.src = person.photo;
+  avatarEl.classList.remove("grayscale");
+  avatarEl.classList.add("reveal");
+
+  if (celebrate) fireConfetti();
+}
+function resetRandomizer() {
+  const password = prompt("Enter password to reset:");
+  if (password !== RANDOMIZER_PASSWORD) {
+    alert("Incorrect password.");
+    return;
+  }
+
+  remainingPeople = [...ALL_PEOPLE];
+  lastPicked = null;
+  isLocked = false;
+
+  clearState();
+
+  const nameEl = document.getElementById("randomizerResult");
+  const avatarEl = document.getElementById("randomizerAvatar");
+
+  nameEl.textContent = "—";
+  avatarEl.src = "";
+  avatarEl.classList.add("grayscale");
+  avatarEl.classList.remove("reveal");
+}
+
 </script>
 
 
