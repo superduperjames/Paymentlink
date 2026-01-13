@@ -560,7 +560,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 across */
   grid-template-rows: repeat(2, 1fr);    /* 2 down */
-  gap: 6px;
+  gap: 12px;
 }
 
 
@@ -639,7 +639,7 @@ textarea {
 
   .highlights-grid {
     grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile */
-    grid-auto-rows: 1fr;
+    grid-auto-rows: repeat(3, 1fr);
     gap: 6px;
   }
 
@@ -1587,9 +1587,16 @@ document.getElementById("eventsTitle").textContent =
 </script>
 
 <script>
-// ===== Image Data =====
+/* =====================================================
+   MONTHLY HIGHLIGHTS GALLERY
+   - Desktop: 4x2 (8 images)
+   - Mobile: 3x3 (9 images)
+   - Paged
+   - Fullscreen view
+===================================================== */
+
+/* ===== Image Pages ===== */
 const allPages = [
-  // Page 1
   [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230431/6043922F-DBE8-42F1-837A-21D4D291D0C1_4_5005_c_r3ermx.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230434/9343BF98-7FD1-458A-98B7-E8A894A15A71_1_105_c_oqzloy.jpg",
@@ -1599,9 +1606,8 @@ const allPages = [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230438/C9593A0E-2031-4957-ADDB-33E880BBD5BF_1_105_c_ixswhj.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768230486/EF67647C-BDFE-4E6A-AF0A-B09F81EFDD6C_1_201_a_udequu.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg",
-    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg",
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233930/20260111_201226_777_mgwol8.jpg"
   ],
-  // Page 2
   [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233940/20260111_201743_250_g185tj.jpg",
@@ -1611,28 +1617,43 @@ const allPages = [
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233940/20260111_201743_250_g185tj.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233933/20260111_202625_680_pvvz5r.jpg",
     "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233955/20260111_212555_528_lf9zq0.jpg",
-    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg",
-    // Add more pages/images as needed
+    "https://res.cloudinary.com/dzjdhooce/image/upload/v1768233905/IMG_1319_fsibcr.jpg"
   ]
 ];
 
+/* ===== State ===== */
 let currentPage = 0;
-const highlightsGrid = document.getElementById("highlightsGrid");
 
-// ===== Render current page =====
+/* ===== DOM ===== */
+const highlightsGrid = document.getElementById("highlightsGrid");
+const fullscreenModal = document.getElementById("fullscreenModal");
+const fullscreenImg = document.getElementById("fullscreenImg");
+
+/* ===== Helpers ===== */
+function imagesPerPage() {
+  return window.innerWidth <= 768 ? 9 : 8;
+}
+
+/* ===== Render ===== */
 function renderPage() {
+  if (!highlightsGrid) return;
+
   highlightsGrid.innerHTML = "";
-  const pageImages = allPages[currentPage];
-  pageImages.forEach(src => {
+
+  const limit = imagesPerPage();
+  const images = allPages[currentPage].slice(0, limit);
+
+  images.forEach(src => {
     const img = document.createElement("img");
     img.src = src;
-    img.alt = "Highlight";
+    img.alt = "Monthly highlight";
+    img.loading = "lazy";
     img.onclick = () => openFullscreen(src);
     highlightsGrid.appendChild(img);
   });
 }
 
-// ===== Paging =====
+/* ===== Paging ===== */
 function nextPage() {
   if (currentPage < allPages.length - 1) {
     currentPage++;
@@ -1647,10 +1668,7 @@ function prevPage() {
   }
 }
 
-// ===== Fullscreen =====
-const fullscreenModal = document.getElementById("fullscreenModal");
-const fullscreenImg = document.getElementById("fullscreenImg");
-
+/* ===== Fullscreen ===== */
 function openFullscreen(src) {
   fullscreenImg.src = src;
   fullscreenModal.style.display = "flex";
@@ -1661,10 +1679,11 @@ function closeFullscreen() {
   fullscreenImg.src = "";
 }
 
-// ===== Initial render =====
-renderPage();
-
+/* ===== Events ===== */
+window.addEventListener("resize", renderPage);
+document.addEventListener("DOMContentLoaded", renderPage);
 </script>
+
     
 <script>
 /* ===============================
