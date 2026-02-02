@@ -1012,7 +1012,7 @@ textarea {
 
   <!-- Actions -->
   <div class="checklist-actions">
-    <a href="#" onclick="downloadChecklistPDF(event)">Download checklist as PDF</a>
+    <a href="#" onclick="saveChecklistToNotes(event)">Save checklist to Notes</a>
   </div>
 </div>
 
@@ -1326,6 +1326,35 @@ function downloadChecklistPDF(e) {
 // Load checklist on page ready
 document.addEventListener("DOMContentLoaded", loadChecklist);
 </script>
+
+  <script>
+function saveChecklistToNotes(e) {
+  e.preventDefault();
+
+  let text = "Anjo & Kath Wedding Essentials Checklist\n\n";
+
+  checklistData.forEach(row => {
+    const label = row[0];
+    const done = row[1] === true || row[1] === "TRUE";
+    text += `${done ? "☑" : "☐"} ${label}\n`;
+  });
+
+  // Create a temporary text file
+  const blob = new Blob([text], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  // Trigger share / open behavior
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "Wedding_Checklist.txt";
+  document.body.appendChild(a);
+  a.click();
+
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
 
 </div>
 
